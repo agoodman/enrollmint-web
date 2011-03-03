@@ -12,7 +12,9 @@ class Customers::SubscriptionsController < ApplicationController
 
   def create
     @subscription = Subscription.new(params[:subscription])
+    # explicitly assign customer id to prevent injection
     @subscription.customer_id = @customer.id
+    
     respond_to do |format|
       if @subscription.save
         format.json { render :json => @subscription, :status => :ok }

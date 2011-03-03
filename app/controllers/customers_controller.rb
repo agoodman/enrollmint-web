@@ -5,12 +5,15 @@ class CustomersController < ApplicationController
   def index
     @customers = current_user.customers
     respond_to do |format|
-      format.json { render :json => @customers, :status => :ok }
+      format.json { render :json => @customers.to_json(:only => [:id,:email]), :status => :ok }
     end
   end
   
   def create
     @customer = Customer.new(params[:customer])
+    # explicitly assign user id to prevent injection
+    @customer.user_id = current_user.id
+    
     respond_to do |format|
       if @customer.save
         format.json { render :json => @customer, :status => :ok }

@@ -17,6 +17,11 @@ class ApplicationController < ActionController::Base
         format.json { render :json => { :errors => [ "You do not have permission." ] }, :status => :unauthorized }
       end
     end
+    
+  rescue ActiveRecord::RecordNotFound
+    respond_to do |format|
+      format.json { render :json => { :errors => [ "Customer does not exist." ] }, :status => :not_found }
+    end
   end
 
 end

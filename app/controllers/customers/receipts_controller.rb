@@ -5,7 +5,9 @@ class Customers::ReceiptsController < ApplicationController
   
   def create
     @receipt = Receipt.new(params[:receipt])
+    # explicitly assign customer id to prevent injection
     @receipt.customer_id = @customer.id
+    
     respond_to do |format|
       if @receipt.save
         format.json { head :ok }

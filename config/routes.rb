@@ -1,4 +1,6 @@
 InventoryKitWeb::Application.routes.draw do
+
+  resource :user, :only => [ :create, :show, :update, :destroy ]
   
   resources :customers, :only => [ :index, :create, :show, :update ] do
     resources :subscriptions, :controller => 'customers/subscriptions', :only => [ :index, :create, :show, :update ]
