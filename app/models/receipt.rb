@@ -11,22 +11,24 @@ class Receipt < ActiveRecord::Base
 
   # fetches transaction data from iTunes Store
   def retrieve_transaction_data
-    # build request hash
-    request_data = { "receipt-data" => receipt_data }.to_json
+    unless Rails.env == 'test'
+      # build request hash
+      request_data = { "receipt-data" => receipt_data }.to_json
     
-    # retrieve transaction from iTunes
-    uri = URI.parse("https://sandbox.itunes.apple.com/verifyReceipt")
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
-    request.body = request_data
-    response = http.request(request)
+      # retrieve transaction from iTunes
+      uri = URI.parse("https://sandbox.itunes.apple.com/verifyReceipt")
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
+      request.body = request_data
+      response = http.request(request)
     
-    # handle response
-    case response
-    when Net::HTTPSuccess
-      return process_response_data(response.body)
-    else
-      return false
+      # handle response
+      case response
+      when Net::HTTPSuccess
+        return process_response_data(response.body)
+      else
+        return false
+      end
     end
   rescue
     return false
@@ -54,10 +56,10 @@ class Receipt < ActiveRecord::Base
     end
     
     # update subscription expiration date
-    if product_id ~= /month$/i
+    if product_id =~ /month$/i
       subscription.expires_on = subscription.expires_on + quantity.months
       subscription.save
-    elsif product_id ~= /year$/i
+    elsif product_id =~ /year$/i
       subscription.expires_on = subscription.expires_on + quantity.years
       subscription.save
     end
