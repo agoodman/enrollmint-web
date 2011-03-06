@@ -10,11 +10,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110305201232) do
+ActiveRecord::Schema.define(:version => 20110306023357) do
 
   create_table "customers", :force => true do |t|
     t.integer  "user_id"
     t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "products", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "identifier"
+    t.integer  "duration"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -28,10 +36,10 @@ ActiveRecord::Schema.define(:version => 20110305201232) do
 
   create_table "subscriptions", :force => true do |t|
     t.integer  "customer_id"
-    t.string   "product_identifier"
     t.date     "expires_on"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "product_id"
   end
 
   create_table "users", :force => true do |t|
@@ -46,6 +54,7 @@ ActiveRecord::Schema.define(:version => 20110305201232) do
     t.boolean  "terms_of_service_accepted",                :default => false
     t.string   "first_name"
     t.string   "last_name"
+    t.string   "api_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
