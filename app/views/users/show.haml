@@ -1,0 +1,41 @@
+= content_for :heading, "Manage Your Account"
+= content_for :caption, "Update your email or personal information."
+%h2 Edit Your Account
+
+%h3 Personal Information
+%p First Name: #{@user.first_name}
+%p Last Name: #{@user.last_name}
+		
+%h3 Account Information
+%p Email: #{@user.email}
+
+/ %h3 Time Zone
+/ %p
+/ 	= user.label :time_zone
+/ 	= user.text_field :time_zone
+
+%p= link_to_function 'EDIT ACCOUNT', "jQuery('#edit_account').dialog({modal:true,title:'Edit Your Account',width:'40em'})", :class => 'button'
+
+#edit_account{:style=>"display:none"}
+	= form_for @user do |user|
+
+		%h3 Personal Information
+		%p
+			= user.label :first_name
+			= user.text_field :first_name
+		%p
+			= user.label :last_name
+			= user.text_field :last_name
+
+		%h3 Account Information
+		%p
+			= user.label :email
+			= user.text_field :email
+
+		/ %h3 Time Zone
+		/ %p
+		/ 	= user.label :time_zone
+		/ 	= user.text_field :time_zone
+
+		%p= user.submit 'UPDATE ACCOUNT', :class => 'button'
+	

@@ -82,6 +82,15 @@ a {
 	min-height: 200px;
 }
 
+#content .ui-widget {
+	font-size: 9pt;
+}
+
+
+#content td {
+	padding: 5px;
+}
+
 ul#steps {
 	list-style: none;
 	height: 200px;

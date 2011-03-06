@@ -1,0 +1,16 @@
+= content_for :heading, "Sign In"
+= content_for :caption, "Manage products and subscriptions securely."
+%h2 Sign In
+= form_for :session, :url => session_path do |form| 
+	%table{:border => 0, :cellspacing => 0, :cellpadding => 5}
+		%tr
+			%td{:style => "width:100px"}= form.label :email
+			%td= form.text_field :email
+		%tr
+			%td= form.label :password
+			%td= form.password_field :password
+	%p= form.submit "Sign in", :disable_with => "Please wait...", :class => 'button'
+
+%ul
+	%li= link_to "Sign up", sign_up_path
+	%li= link_to "Forgot password?", new_password_path

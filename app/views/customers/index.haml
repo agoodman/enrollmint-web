@@ -1,0 +1,34 @@
+= content_for :heading, "Manage Customers"
+= content_for :caption, "See details for customers and their active subscriptions."
+%h2 Customers
+- if @customers.empty?
+	%p You have not created a customer.
+- else
+	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
+		%tr
+			%th EMAIL
+			%th SUBSCRIPTION
+			%th EXPIRES ON
+			%th 
+		- @customers.each do |customer| 
+			%tr 
+				%td= customer.email
+				%td= customer.subscriptions.collect {|sub| sub.product.identifier}.join("<br/>")
+				%td= customer.subscriptions.collect {|sub| sub.expires_on.to_s}.join("<br/>")
+				%td
+					= link_to_function 'edit', "jQuery('#edit_#{dom_id(customer)}').dialog({modal:true,title:'Edit Customer',width:'40em'})", :class => 'button wrench'
+					%div{:id => "edit_#{dom_id(customer)}", :style => "display:none"}
+						= form_for customer do |form| 
+							%p
+								= form.label :email
+								= form.text_field :email
+							%p= form.submit "UPDATE CUSTOMER", :class => 'button'
+					= link_to 'remove', customer, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
+%p= link_to_function 'ADD CUSTOMER', "jQuery('#customer_panel').dialog({modal:true,title:'Add a Customer',width:'40em'})", :class => 'button'
+#customer_panel{:style=>"display:none"}
+	= form_for Customer.new do |customer| 
+		= customer.hidden_field :user_id, :value => current_user.id
+		%p
+			= customer.label :email
+			= customer.text_field :email
+		%p= customer.submit "CREATE CUSTOMER", :class => 'button'

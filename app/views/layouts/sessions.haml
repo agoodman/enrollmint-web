@@ -1,0 +1,8 @@
+= content_for :nav do
+	#menu
+		= link_to 'HOME', root_path
+		= link_to 'FEATURES', features_path
+	#account
+		= link_to 'SIGN UP', sign_up_path
+		= link_to 'SIGN IN', sign_in_path
+= render :file => '/layouts/application'

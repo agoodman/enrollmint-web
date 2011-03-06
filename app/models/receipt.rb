@@ -47,22 +47,21 @@ class Receipt < ActiveRecord::Base
     transaction_id = receipt['transaction_id']
     purchase_date = receipt['purchase_date']
     
+    # lookup product
+    product = Product.find_by_identifier(product_id)
+    return false unless product
+    
     # find associated subscription
-    subscription = Subscription.find_by_customer_id_and_product_identifier(customer_id, product_id)
+    subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
     
     # create subscription if one is not found; update existing if found
     if subscription.nil?
-      subscription = Subscription.create(:customer_id => customer_id, :product_identifier => product_id)
+      subscription = Subscription.new(:customer_id => customer_id, :product_id => product.id)
     end
     
     # update subscription expiration date
-    if product_id =~ /month$/i
-      subscription.expires_on = subscription.expires_on + quantity.months
-      subscription.save
-    elsif product_id =~ /year$/i
-      subscription.expires_on = subscription.expires_on + quantity.years
-      subscription.save
-    end
+    subscription.expires_on = purchase_date + quantity * product.duration.seconds
+    subscription.save
   end
   
 end

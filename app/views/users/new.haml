@@ -1,0 +1,42 @@
+= content_for :heading, "No Fees Ever!"
+= content_for :caption, "We will never charge you an annual fee. Pay just 10% of your subscription revenues"
+%h2 Create an Account
+%p It's quick and easy, and you won't pay a penny.
+
+= form_for User.new do |user|
+
+	%h3 Personal Information
+	%p
+		= user.label :first_name
+		= user.text_field :first_name
+	%p
+		= user.label :last_name
+		= user.text_field :last_name
+		
+	%h3 Account Information
+	%p
+		= user.label :email
+		= user.text_field :email
+	%p
+		= user.label :password
+		= user.text_field :password
+	%p
+		= user.label :password_confirmation
+		= user.text_field :password_confirmation
+
+	/ %h3 Time Zone
+	/ %p
+	/ 	= user.label :time_zone
+	/ 	= user.text_field :time_zone
+
+	%h3 Terms of Service
+	%p
+		By creating an account on this service, you accept the 
+		= link_to 'terms of service', '#'
+		and agree to pay Migrant Studios 10% of all subscription revenues tracked
+		by EnrollMint.
+	= user.label :terms_of_service_accepted, 'I agree and understand I will be billed quarterly.' 
+	= user.check_box :terms_of_service_accepted
+	
+	
+	%p= user.submit 'CREATE ACCOUNT', :class => 'button'

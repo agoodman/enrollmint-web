@@ -1,0 +1,42 @@
+= content_for :heading, "Manage Subscription Products"
+= content_for :caption, "Use globally unique identifiers to define your subscription products."
+%h2 Products
+- if @products.empty?
+	%p You have not created a product.
+- else
+	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
+		%tr
+			%th IDENTIFIER
+			%th DURATION
+			%th 
+		- @products.each do |product| 
+			%tr 
+				%td #{product.identifier} 
+				%td
+					- if Product::DURATIONS.has_value?(product.duration)
+						#{Product::DURATIONS.select {|k,v| v==product.duration}.first[0]}ly
+					- else
+						#{product.duration} secs
+				%td
+					= link_to_function 'edit', "jQuery('#edit_#{dom_id(product)}').dialog({modal:true,title:'Edit Product',width:'40em'})", :class => 'button wrench'
+					%div{:id => "edit_#{dom_id(product)}", :style => "display:none"}
+						= form_for product do |form| 
+							%p
+								= form.label :identifier, "Product ID"
+								= form.text_field :identifier
+							%p
+								= form.label :duration
+								= form.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
+							%p= form.submit "UPDATE PRODUCT", :class => 'button'
+					= link_to 'remove', product, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
+%p= link_to_function 'ADD PRODUCT', "jQuery('#product_panel').dialog({modal:true,title:'Add a Product',width:'40em'})", :class => 'button'
+#product_panel{:style=>"display:none"}
+	= form_for Product.new do |product| 
+		= product.hidden_field :user_id, :value => current_user.id
+		%p
+			= product.label :identifier, "Product ID"
+			= product.text_field :identifier
+		%p
+			= product.label :duration
+			= product.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
+		%p= product.submit "CREATE PRODUCT", :class => 'button'
