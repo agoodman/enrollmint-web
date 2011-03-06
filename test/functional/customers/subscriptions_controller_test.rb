@@ -6,6 +6,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user)
       @customer = Factory(:customer, :user => @user)
+      @product = Factory(:product, :user => @user)
       sign_out
     end
     
@@ -19,7 +20,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     
     context "on post create as json" do
       setup do
-        post :create, :format => 'json', :customer_id => @customer.id, :subscription => Factory.attributes_for(:subscription, :customer_id => @customer.id)
+        post :create, :format => 'json', :customer_id => @customer.id, :subscription => Factory.attributes_for(:subscription, :customer_id => @customer.id, :product_id => @product.id)
       end
       
       should respond_with :unauthorized
@@ -27,7 +28,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     
     context "on get show as json" do
       setup do
-        @subscription = Factory(:subscription, :customer => @customer)
+        @subscription = Factory(:subscription, :customer => @customer, :product => @product)
         get :show, :format => 'json', :customer_id => @customer.id, :id => @subscription.id
       end
       
@@ -36,7 +37,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
 
     context "on put update as json" do
       setup do
-        @subscription = Factory(:subscription, :customer => @customer)
+        @subscription = Factory(:subscription, :customer => @customer, :product => @product)
         put :update, :format => 'json', :customer_id => @customer.id, :id => @subscription.id, :subscription => Factory.attributes_for(:subscription)
       end
       
@@ -48,6 +49,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     setup do
       @user = Factory(:user, :expires_on => Date.today+1.month)
       @customer = Factory(:customer, :user => @user)
+      @product = Factory(:product, :user => @user)
       sign_in_as @user
     end
     
@@ -62,7 +64,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     
     context "on post create as json" do
       setup do
-        post :create, :format => 'json', :customer_id => @customer.id, :subscription => Factory.attributes_for(:subscription, :customer_id => @customer.id)
+        post :create, :format => 'json', :customer_id => @customer.id, :subscription => Factory.attributes_for(:subscription, :customer_id => @customer.id, :product_id => @product.id)
       end
       
       should respond_with :success
@@ -70,7 +72,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     
     context "on get show as json" do
       setup do
-        @subscription = Factory(:subscription, :customer => @customer)
+        @subscription = Factory(:subscription, :customer => @customer, :product => @product)
         get :show, :format => 'json', :customer_id => @customer.id, :id => @subscription.id
       end
       
@@ -79,7 +81,7 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     
     context "on put update as json" do
       setup do
-        @subscription = Factory(:subscription, :customer => @customer)
+        @subscription = Factory(:subscription, :customer => @customer, :product => @product)
         put :update, :format => 'json', :customer_id => @customer.id, :id => @subscription.id, :subscription => Factory.attributes_for(:subscription)
       end
       
