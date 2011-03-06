@@ -15,9 +15,9 @@ class UsersController < Clearance::UsersController
     
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.json { render :json => { :errors => @user.errors.full_messages }, :status => :unprocessable_entity }
-      else
         head :ok
+      else
+        format.json { render :json => { :errors => @user.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
