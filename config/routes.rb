@@ -1,5 +1,8 @@
 InventoryKitWeb::Application.routes.draw do
 
+  match '/sign_up' => 'users#new', :as => 'sign_up'
+  match '/sign_out' => 'sessions#destroy', :as => 'sign_out'
+  
   resource :user, :only => [ :create, :show, :update, :destroy ]
   resources :products, :only => [ :index, :create, :show, :update, :destroy ]
   
@@ -7,6 +10,9 @@ InventoryKitWeb::Application.routes.draw do
     resources :subscriptions, :controller => 'customers/subscriptions', :only => [ :index, :create, :show, :update ]
     resources :receipts, :controller => 'customers/receipts', :only => [ :create ]
   end
+
+  match '/features' => 'home#features', :as => 'features'
+  root :to => 'home#index'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

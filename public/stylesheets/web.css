@@ -1,0 +1,123 @@
+body {
+	margin: 0;
+	font-family: Myriad Pro, Verdana;
+	font-size: 12pt;
+}
+
+a {
+	text-decoration: none;
+}
+
+#wrap {
+	min-width: 50em;
+	max-width: 50em;
+	width: 50em;
+	margin: 0 auto;
+	padding-top: 25px;
+}
+
+#header {
+	height: 150px;
+}
+
+#brand {
+	float: left;
+	padding: 25px 0;
+}
+
+#logo {
+	font-size: 21pt;
+}
+
+#tagline {
+	font-size: 14pt;
+}
+
+#tag {
+	float: right;
+	padding: 25px 0 25px 25px;
+	min-width: 30em;
+	max-width: 30em;
+	width: 30em;
+}
+
+#heading {
+	font-size: 24pt;
+}
+
+#caption {
+	font-size: 18pt;
+}
+
+#nav {
+	height: 50px;
+	background: #eee;
+}
+
+#menu a, 
+#account a {
+	height: 30px;
+	display: block;
+	float: left;
+	padding: 10px;
+	font-size: 14pt;
+	line-height: 30px;
+	color: #006A35;
+}
+
+#menu a, 
+#account a {
+
+}
+
+#menu {
+	float: left;
+}
+
+#account {
+	float: right;
+}
+
+#content {
+	min-height: 200px;
+}
+
+ul#steps {
+	list-style: none;
+	height: 200px;
+	margin: 0;
+	padding: 0;
+}
+
+ul#steps li {
+	float: left;
+	width: 15em;
+	height: 200px;
+	margin-left: 2.5em;
+}
+
+ul#steps li:first-child {
+	margin-left: 0;
+}
+
+ul#steps h2 {
+	font-size: 16pt;
+}
+
+#features {
+	float: left;
+	min-width: 34em;
+}
+
+#action {
+	min-width: 14em;
+	max-width: 14em;
+	width: 14em;
+	float: right;
+	padding: 75px 10px 10px 10px;
+	text-align: center;
+}
+
+#action p {
+	margin: 0;
+}
