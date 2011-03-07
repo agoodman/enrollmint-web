@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   private
   
   def deny_access
-    puts "deny_access"
     respond_to do |format|
       format.json { render :json => { :errors => [ "You are not authorized." ] }, :status => :unauthorized }
     end

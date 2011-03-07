@@ -23,7 +23,7 @@
 						= form_for product do |form| 
 							%p
 								= form.label :identifier, "Product ID"
-								= form.text_field :identifier, :class => 'identifier'
+								= form.text_field :identifier, :class => 'identifier', :size => 40
 							%p
 								= form.label :duration
 								= form.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
@@ -35,8 +35,13 @@
 		= product.hidden_field :user_id, :value => current_user.id
 		%p
 			= product.label :identifier, "Product ID"
-			= product.text_field :identifier, :class => 'identifier'
+			= product.text_field :identifier, :class => 'identifier', :size => 40
 		%p
 			= product.label :duration
 			= product.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
 		%p= product.submit "CREATE PRODUCT", :class => 'button'
+#whatnext.ui-state-highlight
+	%h4 What Next?
+	%ul
+		%li= link_to 'Find My API Token', user_path(:token => true)
+		%li= link_to 'Learn about InventoryKit (github)', 'https://github.com/agoodman/inventory-kit', :target => 'new'

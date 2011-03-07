@@ -1,26 +1,34 @@
 = content_for :heading, "Manage Your Account"
 = content_for :caption, "Update your email or personal information."
-%h2 Edit Your Account
+#user
+	%h2 Edit Your Account
 
-%h3 Personal Information
-%p First Name: #{@user.first_name}
-%p Last Name: #{@user.last_name}
+	%h3 Personal Information
+	%p First Name: #{@user.first_name}
+	%p Last Name: #{@user.last_name}
 		
-%h3 Account Information
-%p Email: #{@user.email}
-%p 
-	API Token: 
-	%span#show_api_token= link_to_function 'show token', "jQuery('#show_api_token').hide();jQuery('#hide_api_token').show()"
-	%span#hide_api_token{:style => 'display:none'}
-		= @user.api_token
-		= link_to_function 'hide token', "jQuery('#show_api_token').show();jQuery('#hide_api_token').hide()"
+	%h3 Account Information
+	%p Email: #{@user.email}
+	%p.token 
+		API Token: 
+		%span#show_api_token= link_to_function 'show token', "jQuery('#show_api_token').hide();jQuery('#hide_api_token,#whatnext').show()"
+		%span#hide_api_token{:style => 'display:none'}
+			= @user.api_token
+			= link_to_function 'hide token', "jQuery('#show_api_token').show();jQuery('#hide_api_token,#whatnext').hide()"
+	%p= link_to_function 'EDIT ACCOUNT', "jQuery('#edit_account').dialog({modal:true,title:'Edit Your Account',width:'40em'})", :class => 'button'
 
-/ %h3 Time Zone
-/ %p
-/ 	= user.label :time_zone
-/ 	= user.text_field :time_zone
-
-%p= link_to_function 'EDIT ACCOUNT', "jQuery('#edit_account').dialog({modal:true,title:'Edit Your Account',width:'40em'})", :class => 'button'
+#whatnext.sidebar.ui-state-highlight{:style => "display:none"}
+	%h4 What Next?
+	%p
+		Use your API Token to authenticate your app with our service.
+		Using InventoryKit, you need only set the API Token, like this:
+	%code [InventoryKit setApiToken:@"abcde12345"]
+	%p
+		It then does the rest, syncing with our web service in the 
+		background on your subscriber's mobile device.
+	%ul
+		%li= link_to 'Learn More About InventoryKit (github)', 'https://github.com/agoodman/inventory-kit', :target => 'new'
+		%li= link_to 'Analytics and Reporting (coming soon)', '#'
 
 #edit_account{:style=>"display:none"}
 	= form_for @user do |user|
@@ -44,4 +52,6 @@
 		/ 	= user.text_field :time_zone
 
 		%p= user.submit 'UPDATE ACCOUNT', :class => 'button'
-	
+
+- if params[:token]
+	%script jQuery(document).ready(new function() {jQuery('#show_api_token').hide();jQuery('#hide_api_token,#whatnext').show();jQuery('.token').effect('highlight',{},2000)});

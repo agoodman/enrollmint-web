@@ -11,6 +11,18 @@ a {
 	color: #006A35;
 }
 
+h4 {
+	margin: 0 0 15px 0;
+}
+
+h4 + p {
+	margin: 0;
+}
+
+ul {
+	margin: 0;
+}
+
 #wrap {
 	min-width: 50em;
 	max-width: 50em;
@@ -83,13 +95,13 @@ a {
 }
 
 #content {
-	min-height: 200px;
+	min-height: 400px;
+	padding-bottom: 25px;
 }
 
-#content .ui-widget {
+body .ui-widget {
 	font-size: 9pt;
 }
-
 
 #content td,
 #content th {
@@ -101,6 +113,15 @@ a {
 	min-width: 25em;
 	max-width: 25em;
 	width: 25em;
+}
+
+#flash > p > span {
+	float: left;
+	margin: 0.3em;
+}
+
+#flash a {
+	margin-left: 25px;
 }
 
 ul#steps {
@@ -127,13 +148,15 @@ ul#steps h2 {
 
 #features {
 	float: left;
-	min-width: 34em;
+	min-width: 36em;
+	max-width: 36em;
+	width: 36em;
 }
 
 #action {
-	min-width: 14em;
-	max-width: 14em;
-	width: 14em;
+	min-width: 12em;
+	max-width: 12em;
+	width: 12em;
 	float: right;
 	padding: 75px 10px 10px 10px;
 	text-align: center;
@@ -141,4 +164,36 @@ ul#steps h2 {
 
 #action p {
 	margin: 0;
+}
+
+#whatnext {
+	border: 1px solid #eee;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+#whatnext.sidebar {
+	float: right;
+	width: 25em;
+	min-height: 200px;
+	margin: 25px;
+}
+
+#hide_api_token #whatnext {
+	right: 0px;
+	width: 15em;
+}
+
+#user {
+	float: left;
+}
+
+#footer {
+	height: 50px;
+	min-width: 50em;
+	max-width: 50em;
+	width: 50em;
+	clear: both;
 }

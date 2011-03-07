@@ -23,6 +23,7 @@
 			jQuery('.button.wrench').button({icons:{primary:'ui-icon-wrench'},text:false});
 			jQuery('.button.up').button({icons:{primary:'ui-icon-triangle-1-n'},text:false});
 			jQuery('.button.down').button({icons:{primary:'ui-icon-triangle-1-s'},text:false});
+			jQuery('.button.close').button({icons:{primary:'ui-icon-circle-close'},text:false});
 			jQuery('.button').button();
 			jQuery('.tabs').tabs();
 			jQuery('.datepicker').datepicker();
@@ -41,9 +42,17 @@
 				= yield(:nav)
 			#content
 				- if flash[:notice] 
-					#flash.ui-state-highlight= flash[:notice]
+					#flash.ui-state-highlight
+						%p
+							%span.ui-icon.ui-icon-info
+							= flash[:notice]
+							= link_to_function 'dismiss', "jQuery('#flash.ui-state-highlight').hide()", :class => 'button close'
 				- if flash[:alert] 
-					#flash.ui-state-error= flash[:alert]
+					#flash.ui-state-error
+						%p
+							%span.ui-icon.ui-icon-alert
+							= flash[:alert]
+							= link_to_function 'dismiss', "jQuery('#flash.ui-state-error').hide()", :class => 'button close'
 				= yield
 			#footer
 				© 2011 Migrant Studios. All Rights Reserved.
