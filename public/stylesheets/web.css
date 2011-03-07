@@ -1,11 +1,14 @@
+/** {border: 1px solid black;}
+*/
 body {
 	margin: 0;
-	font-family: Myriad Pro, Verdana;
+	font-family: Myriad Pro, Arial;
 	font-size: 12pt;
 }
 
 a {
 	text-decoration: none;
+	color: #006A35;
 }
 
 #wrap {
@@ -17,12 +20,13 @@ a {
 }
 
 #header {
-	height: 150px;
+	min-height: 100px;
+	max-height: 150px;
 }
 
 #brand {
 	float: left;
-	padding: 25px 0;
+/*	padding: 25px 0;*/
 }
 
 #logo {
@@ -30,23 +34,23 @@ a {
 }
 
 #tagline {
-	font-size: 14pt;
+	font-size: 12pt;
 }
 
 #tag {
 	float: right;
-	padding: 25px 0 25px 25px;
+/*	padding: 2em 0 0 0;*/
 	min-width: 30em;
 	max-width: 30em;
 	width: 30em;
 }
 
 #heading {
-	font-size: 24pt;
+	font-size: 18pt;
 }
 
 #caption {
-	font-size: 18pt;
+	font-size: 14pt;
 }
 
 #nav {
@@ -87,8 +91,16 @@ a {
 }
 
 
-#content td {
+#content td,
+#content th {
 	padding: 5px;
+	text-align: left;
+}
+
+#content .identifier {
+	min-width: 25em;
+	max-width: 25em;
+	width: 25em;
 }
 
 ul#steps {

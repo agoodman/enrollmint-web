@@ -7,22 +7,16 @@
 	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
 		%tr
 			%th EMAIL
-			%th SUBSCRIPTION
+			%th.identifier SUBSCRIPTION
 			%th EXPIRES ON
 			%th 
 		- @customers.each do |customer| 
 			%tr 
-				%td= customer.email
+				%td= link_to customer.email, customer
 				%td= customer.subscriptions.collect {|sub| sub.product.identifier}.join("<br/>")
 				%td= customer.subscriptions.collect {|sub| sub.expires_on.to_s}.join("<br/>")
 				%td
-					= link_to_function 'edit', "jQuery('#edit_#{dom_id(customer)}').dialog({modal:true,title:'Edit Customer',width:'40em'})", :class => 'button wrench'
 					%div{:id => "edit_#{dom_id(customer)}", :style => "display:none"}
-						= form_for customer do |form| 
-							%p
-								= form.label :email
-								= form.text_field :email
-							%p= form.submit "UPDATE CUSTOMER", :class => 'button'
 					= link_to 'remove', customer, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
 %p= link_to_function 'ADD CUSTOMER', "jQuery('#customer_panel').dialog({modal:true,title:'Add a Customer',width:'40em'})", :class => 'button'
 #customer_panel{:style=>"display:none"}

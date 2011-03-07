@@ -1,0 +1,50 @@
+= content_for :heading, "Manage Customer Information"
+= content_for :caption, "Update email and add, edit, or delete subscriptions."
+%h2 Details
+%p
+	Email: 
+	= @customer.email
+	= link_to_function 'edit', "jQuery('#customer_panel').dialog({modal:true,title:'Edit Customer Email',width:'40em'})", :class => 'button wrench'
+#customer_panel{:style=>"display:none"}
+	= form_for @customer do |form| 
+		%p
+			= form.label :email
+			= form.text_field :email
+		%p= form.submit "UPDATE CUSTOMER", :class => 'button'
+
+%h2 Subscriptions
+- if @customer.subscriptions.empty?
+	%p No active subscriptions
+- else
+	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
+		%tr
+			%th.identifier PRODUCT ID
+			%th EXPIRES ON
+			%th
+		- @customer.subscriptions.each do |subscription| 
+			%tr
+				%td= subscription.product.identifier
+				%td= subscription.expires_on.to_s
+				%td
+					= link_to_function 'edit', "jQuery('#edit_#{dom_id(subscription)}').dialog({modal:true,title:'Edit Subscription',width:'40em'})", :class => 'button wrench'
+					%div{:id=>"edit_#{dom_id(subscription)}", :style => "display:none"}
+						= form_for [@customer,subscription] do |form| 
+							%p
+								Product ID:
+								= subscription.product.identifier
+							%p
+								= form.label :expires_on
+								= form.text_field :expires_on, :class => 'datepicker', :id => "#{dom_id(subscription)}_expires_on"
+							%p= form.submit "UPDATE SUBSCRIPTION", :class => 'button'
+					= link_to 'delete', [@customer,subscription], :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
+%p= link_to_function "CREATE SUBSCRIPTION", "jQuery('#subscription_panel').dialog({modal:true,title:'Create a Subscription',width:'40em'})", :class => 'button'
+#subscription_panel{:style=>"display:none"}
+	= form_for [@customer,Subscription.new] do |form| 
+		= form.hidden_field :customer_id, :value => @customer.id
+		%p
+			= form.label :product_id, "Product ID"
+			= form.select :product_id, @products.collect {|product| [product.identifier,product.id]}, :class => 'identifier'
+		%p
+			= form.label :expires_on
+			= form.text_field :expires_on, :class => 'datepicker'
+		%p= form.submit "CREATE SUBSCRIPTION", :class => 'button'

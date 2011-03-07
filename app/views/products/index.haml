@@ -4,9 +4,9 @@
 - if @products.empty?
 	%p You have not created a product.
 - else
-	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
+	%table.products{:border => 0, :cellspacing => 0, :cellpadding => 0}
 		%tr
-			%th IDENTIFIER
+			%th.identifier IDENTIFIER
 			%th DURATION
 			%th 
 		- @products.each do |product| 
@@ -23,7 +23,7 @@
 						= form_for product do |form| 
 							%p
 								= form.label :identifier, "Product ID"
-								= form.text_field :identifier
+								= form.text_field :identifier, :class => 'identifier'
 							%p
 								= form.label :duration
 								= form.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
@@ -35,7 +35,7 @@
 		= product.hidden_field :user_id, :value => current_user.id
 		%p
 			= product.label :identifier, "Product ID"
-			= product.text_field :identifier
+			= product.text_field :identifier, :class => 'identifier'
 		%p
 			= product.label :duration
 			= product.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}

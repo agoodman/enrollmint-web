@@ -8,6 +8,12 @@
 		
 %h3 Account Information
 %p Email: #{@user.email}
+%p 
+	API Token: 
+	%span#show_api_token= link_to_function 'show token', "jQuery('#show_api_token').hide();jQuery('#hide_api_token').show()"
+	%span#hide_api_token{:style => 'display:none'}
+		= @user.api_token
+		= link_to_function 'hide token', "jQuery('#show_api_token').show();jQuery('#hide_api_token').hide()"
 
 / %h3 Time Zone
 / %p
