@@ -77,6 +77,16 @@ class CustomersControllerTest < ActionController::TestCase
       should assign_to :customer
     end
     
+    context "on get show by secret key as json" do
+      setup do
+        @customer = Factory(:customer, :user => @user)
+        get :show, :format => 'json', :secret_key => @customer.secret_key
+      end
+      
+      should respond_with :success
+      should assign_to :customer
+    end
+    
     context "on put update as json" do
       setup do
         @customer = Factory(:customer, :user => @user)

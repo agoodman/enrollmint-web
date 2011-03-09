@@ -2,6 +2,7 @@ class CustomersController < ApplicationController
 
   before_filter :authenticate
   before_filter :assign_products, :only => [ :index, :show ]
+  before_filter :assign_customer, :only => [ :show, :update ]
   
   def index
     @customers = Customer.includes(:subscriptions).where(:user_id => current_user.id).order('email asc')
@@ -28,7 +29,6 @@ class CustomersController < ApplicationController
   end
   
   def show
-    @customer = Customer.find(params[:id])
     respond_to do |format|
       format.html
       format.json { render :json => @customer }
@@ -36,7 +36,6 @@ class CustomersController < ApplicationController
   end
   
   def update
-    @customer = Customer.find(params[:id])
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
         format.html { redirect_to customers_path, :notice => "Customer updated." }
@@ -52,6 +51,11 @@ class CustomersController < ApplicationController
   
   def assign_products
     @products = Product.where(:user_id => current_user.id).order('identifier asc')
+  end
+
+  def assign_customer
+    @customer = Customer.find_by_secret_key(params[:secret_key]) if params[:secret_key]
+    @customer = Customer.find(params[:id]) if params[:id]
   end
   
 end

@@ -1,3 +1,3 @@
 Factory.define :subscription do |subscription|
-  subscription.expires_on { Date.today + 30.days }
+  subscription.expires_on { Time.now + 1.month }
 end

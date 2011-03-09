@@ -7,4 +7,14 @@ class Customer < ActiveRecord::Base
   
   validates_presence_of :user_id
   
+  attr_accessible :email
+  
+  before_save :generate_secret_key
+  
+  # private
+  
+  def generate_secret_key
+    self.secret_key = Digest::SHA1.hexdigest("--#{email}--")[0..9]
+  end
+  
 end

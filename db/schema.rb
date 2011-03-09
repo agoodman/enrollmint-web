@@ -10,13 +10,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110306023357) do
+ActiveRecord::Schema.define(:version => 20110309172643) do
 
   create_table "customers", :force => true do |t|
     t.integer  "user_id"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "secret_key"
   end
 
   create_table "products", :force => true do |t|
@@ -40,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20110306023357) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "product_id"
+    t.string   "secret_key"
   end
 
   create_table "users", :force => true do |t|
@@ -50,7 +52,6 @@ ActiveRecord::Schema.define(:version => 20110306023357) do
     t.string   "remember_token",            :limit => 128
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "expires_on"
     t.boolean  "terms_of_service_accepted",                :default => false
     t.string   "first_name"
     t.string   "last_name"

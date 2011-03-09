@@ -45,9 +45,9 @@ class Customers::SubscriptionsControllerTest < ActionController::TestCase
     end
   end
 
-  context "when signed in with active subscription" do
+  context "when signed in" do
     setup do
-      @user = Factory(:user, :expires_on => Date.today+1.month)
+      @user = Factory(:user)
       @customer = Factory(:customer, :user => @user)
       @product = Factory(:product, :user => @user)
       sign_in_as @user
