@@ -7,7 +7,9 @@ class ProductTest < ActiveSupport::TestCase
   should validate_presence_of :user_id
   should validate_presence_of :identifier
   should validate_presence_of :duration
+  should validate_presence_of :price
   should validate_uniqueness_of :identifier
   should validate_numericality_of :duration
+  should validate_numericality_of :price
   
 end

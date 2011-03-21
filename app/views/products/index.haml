@@ -8,6 +8,7 @@
 		%tr
 			%th.identifier IDENTIFIER
 			%th DURATION
+			%th PRICE
 			%th 
 		- @products.each do |product| 
 			%tr 
@@ -17,6 +18,7 @@
 						#{Product::DURATIONS.select {|k,v| v==product.duration}.first[0]}ly
 					- else
 						#{product.duration} secs
+				%td= product.price
 				%td
 					= link_to_function 'edit', "jQuery('#edit_#{dom_id(product)}').dialog({modal:true,title:'Edit Product',width:'40em'})", :class => 'button wrench'
 					%div{:id => "edit_#{dom_id(product)}", :style => "display:none"}
@@ -27,6 +29,9 @@
 							%p
 								= form.label :duration
 								= form.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
+							%p
+								= form.label :price
+								= form.text_field :price
 							%p= form.submit "UPDATE PRODUCT", :class => 'button'
 					= link_to 'remove', product, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
 %p= link_to_function 'ADD PRODUCT', "jQuery('#product_panel').dialog({modal:true,title:'Add a Product',width:'40em'})", :class => 'button'
@@ -39,9 +44,13 @@
 		%p
 			= product.label :duration
 			= product.select :duration, Product::DURATIONS.collect {|k,v| [k,v]}
+		%p
+			= product.label :price
+			= product.text_field :price
 		%p= product.submit "CREATE PRODUCT", :class => 'button'
-#whatnext.ui-state-highlight
-	%h4 What Next?
-	%ul
-		%li= link_to 'Find My API Token', user_path(:token => true)
-		%li= link_to 'Learn about InventoryKit (github)', 'https://github.com/agoodman/inventory-kit', :target => 'new'
+- if ! @products.empty?
+	#whatnext.ui-state-highlight
+		%h4 What Next?
+		%ul
+			%li= link_to 'Find My API Token', user_path(:token => true)
+			%li= link_to 'Learn about InventoryKit (github)', 'https://github.com/agoodman/inventory-kit', :target => 'new'

@@ -7,7 +7,7 @@ class ProductsController < ApplicationController
     @products = Product.where(:user_id => current_user.id).order('identifier asc')
     respond_to do |format|
       format.html
-      format.json { render :json => @products }
+      format.json { render :json => @products.to_json(:only => [:id, :identifier, :duration, :price]) }
     end
   end
 
