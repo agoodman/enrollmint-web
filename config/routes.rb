@@ -13,6 +13,7 @@ InventoryKitWeb::Application.routes.draw do
   match '/customers/:secret_key' => 'customers#update', :via => :put, :secret_key => SECRET_KEY_REGEX
   match '/subscriptions/:secret_key' => 'subscriptions#show', :via => :get, :secret_key => SECRET_KEY_REGEX
   match '/subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
+  match '/products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
 
   resources :customers, :only => [ :index, :create, :show, :update ] do
     resources :subscriptions, :controller => 'customers/subscriptions', :only => [ :index, :create, :show, :update ]
