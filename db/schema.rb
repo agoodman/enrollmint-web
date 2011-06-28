@@ -10,53 +10,54 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110319053839) do
+ActiveRecord::Schema.define(:version => 20110628192005) do
 
   create_table "customers", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "secret_key"
+    t.integer   "user_id"
+    t.string    "email"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.string    "secret_key"
   end
 
   create_table "products", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "identifier"
-    t.integer  "duration"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.float    "price"
+    t.integer   "user_id"
+    t.string    "identifier"
+    t.integer   "duration"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.float     "price"
+    t.string    "secret_key"
   end
 
   create_table "receipts", :force => true do |t|
-    t.integer  "customer_id"
-    t.string   "receipt_data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "customer_id"
+    t.string    "receipt_data"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "subscriptions", :force => true do |t|
-    t.integer  "customer_id"
-    t.date     "expires_on"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "product_id"
-    t.string   "secret_key"
+    t.integer   "customer_id"
+    t.date      "expires_on"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "product_id"
+    t.string    "secret_key"
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email"
-    t.string   "encrypted_password",        :limit => 128
-    t.string   "salt",                      :limit => 128
-    t.string   "confirmation_token",        :limit => 128
-    t.string   "remember_token",            :limit => 128
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "terms_of_service_accepted",                :default => false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "api_token"
+    t.string    "email"
+    t.string    "encrypted_password",        :limit => 128
+    t.string    "salt",                      :limit => 128
+    t.string    "confirmation_token",        :limit => 128
+    t.string    "remember_token",            :limit => 128
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.boolean   "terms_of_service_accepted",                :default => false
+    t.string    "first_name"
+    t.string    "last_name"
+    t.string    "api_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
