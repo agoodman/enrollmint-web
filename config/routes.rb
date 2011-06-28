@@ -6,7 +6,6 @@ InventoryKitWeb::Application.routes.draw do
   resource :session, :only => [ :new, :create, :destroy ]
   
   resource :user, :only => [ :create, :show, :update, :destroy ]
-  resources :products, :only => [ :index, :create, :show, :update, :destroy ]
   
   SECRET_KEY_REGEX = /[0-9a-fA-F]{10}/
   match '/customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX
@@ -15,6 +14,7 @@ InventoryKitWeb::Application.routes.draw do
   match '/subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
   match '/products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
 
+  resources :products, :only => [ :index, :create, :show, :update, :destroy ]
   resources :customers, :only => [ :index, :create, :show, :update ] do
     resources :subscriptions, :controller => 'customers/subscriptions', :only => [ :index, :create, :show, :update ]
     resources :receipts, :controller => 'customers/receipts', :only => [ :create ]
