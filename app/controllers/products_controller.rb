@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
 
   before_filter :authenticate
+  before_filter :assign_product, :only => [ :show, :update, :destroy ]
   before_filter :can_access_product?, :only => [ :show, :update, :destroy ]
 
   def index
@@ -55,8 +56,12 @@ class ProductsController < ApplicationController
 
   private
   
+  def assign_product
+    @product = Product.find_by_secret_key(params[:secret_key]) if params[:secret_key]
+    @product = Product.find(params[:id]) if params[:id]
+  end
+  
   def can_access_product?
-    @product = Product.find(params[:id])
     unless current_user.products.include?(@product)
       respond_to do |format|
         format.json { render :json => { :errors => ["You do not have access"] } }
