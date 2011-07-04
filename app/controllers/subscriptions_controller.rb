@@ -5,7 +5,8 @@ class SubscriptionsController < ApplicationController
   
   def show
     respond_to do |format|
-      format.json { render :json => @subscription.to_json }
+      format.json { render :json => @subscription.to_json(:include => {:customer => { :except => :secret_key }, :product => { :except => :secret_key } }, :except => :secret_key) }
+      format.xml { render :xml => @subscription.to_xml(:include => {:customer => { :except => :secret_key }, :product => { :except => :secret_key } }, :except => :secret_key) }
     end
   end
 

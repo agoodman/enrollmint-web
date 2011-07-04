@@ -9,6 +9,7 @@ class CustomersController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @customers.to_json(:only => [:id,:email]), :status => :ok }
+      format.xml { render :xml => @customers.to_xml(:only => [:id,:email]), :status => :ok }
     end
   end
   
@@ -21,9 +22,11 @@ class CustomersController < ApplicationController
       if @customer.save
         format.html { redirect_to app_customers_path(@app), :notice => "Customer created." }
         format.json { render :json => @customer, :status => :ok }
+        format.xml { render :xml => @customer, :status => :ok }
       else
         format.html { redirect_to app_customers_path(@app), :alert => @customer.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
@@ -31,7 +34,8 @@ class CustomersController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render :json => @customer.to_json(:include => { :subscriptions => { :only => [ :id, :expires_on, :created_at, :updated_at ] } }) }
+      format.json { render :json => @customer.to_json(:include => { :subscriptions => { :only => [ :id, :expires_on, :created_at, :updated_at ], :include => :product } }) }
+      format.xml { render :xml => @customer.to_xml(:include => { :subscriptions => { :only => [ :id, :expires_on, :created_at, :updated_at ], :include => :product } }) }
     end
   end
   
@@ -40,9 +44,11 @@ class CustomersController < ApplicationController
       if @customer.update_attributes(params[:customer])
         format.html { redirect_to app_customers_path(@app), :notice => "Customer updated." }
         format.json { head :ok }
+        format.xml { head :ok }
       else
         format.html { redirect_to app_customers_path(@app), :alert => @customer.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
@@ -67,6 +73,7 @@ class CustomersController < ApplicationController
     respond_to do |format|
       format.html { render :file => 'public/404.html' }
       format.json { render :json => { :errors => [ "Customer does not exist." ] }, :status => :not_found }
+      format.xml { render :xml => { :errors => [ "Customer does not exist." ] }, :status => :not_found }
     end
   end  
   

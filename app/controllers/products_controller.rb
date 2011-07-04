@@ -10,6 +10,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @products.to_json(:only => [:id, :identifier, :duration, :price]) }
+      format.xml { render :xml => @products.to_xml(:only => [:id, :identifier, :duration, :price]) }
     end
   end
 
@@ -22,9 +23,11 @@ class ProductsController < ApplicationController
       if @product.save
         format.html { redirect_to app_products_path(@app) }
         format.json { render :json => @product }
+        format.xml { render :xml => @product }
       else
         format.html { redirect_to app_products_path(@app), :alert => @product.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
@@ -32,6 +35,7 @@ class ProductsController < ApplicationController
   def show
     respond_to do |format|
       format.json { render :json => @product }
+      format.xml { render :xml => @product }
     end
   end
 
@@ -40,9 +44,11 @@ class ProductsController < ApplicationController
       if @product.update_attributes(params[:product])
         format.html { redirect_to app_products_path(@app), :notice => "Product updated." }
         format.json { head :ok }
+        format.xml { head :ok }
       else
         format.html { redirect_to app_products_path(@app), :alert => @product.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
@@ -52,6 +58,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to app_products_path(@app), :notice => "Product deleted." }
       format.json { head :ok }
+      format.xml { head :ok }
     end
   end
 
