@@ -44,10 +44,10 @@ class Receipt < ActiveRecord::Base
   def process_response_data(response_json)
     response_data = ActiveSupport::JSON.decode(response_json)
     return false unless response_data
-    return false if response_data.status.to_i != 0
+    return false if response_data['status'].to_i != 0
     
     # extract receipt data
-    receipt = response_data.receipt
+    receipt = response_data['receipt']
     quantity = receipt['quantity']
     product_id = receipt['product_id']
     transaction_id = receipt['transaction_id']
