@@ -44,30 +44,32 @@ class Receipt < ActiveRecord::Base
   def process_response_data(response_json)
     response_data = ActiveSupport::JSON.decode(response_json)
     return false unless response_data
-    return false if response_data['status'].to_i != 0
-    
-    # extract receipt data
-    receipt = response_data['receipt']
-    quantity = receipt['quantity']
-    product_id = receipt['product_id']
-    transaction_id = receipt['transaction_id']
-    purchase_date = receipt['purchase_date']
-    
-    # lookup product
-    product = Product.find_by_identifier(product_id)
-    return false unless product
-    
-    # find associated subscription
-    subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
-    
-    # create subscription if one is not found; update existing if found
-    if subscription.nil?
-      subscription = Subscription.new(:customer_id => customer_id, :product_id => product.id)
+    status = response_data['status'].to_i
+
+    if status==21006 || status==0
+      # extract receipt data
+      receipt = response_data['receipt']
+      quantity = receipt['quantity']
+      product_id = receipt['product_id']
+      transaction_id = receipt['transaction_id']
+      purchase_date = receipt['purchase_date']
+
+      # lookup product
+      product = Product.find_by_identifier(product_id)
+      return false unless product
+
+      # find associated subscription
+      subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
+
+      # create subscription if one is not found; update existing if found
+      if subscription.nil?
+        subscription = Subscription.new(:customer_id => customer_id, :product_id => product.id)
+      end
+
+      # update subscription expiration date
+      subscription.expires_on = purchase_date + quantity * product.duration.seconds
+      subscription.save
     end
-    
-    # update subscription expiration date
-    subscription.expires_on = purchase_date + quantity * product.duration.seconds
-    subscription.save
   end
   
 end
