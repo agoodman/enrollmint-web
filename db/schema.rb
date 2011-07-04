@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110704071344) do
+ActiveRecord::Schema.define(:version => 20110704072644) do
 
   create_table "apps", :force => true do |t|
     t.string    "title"
@@ -41,10 +41,10 @@ ActiveRecord::Schema.define(:version => 20110704071344) do
   end
 
   create_table "receipts", :force => true do |t|
-    t.integer  "customer_id"
-    t.text     "receipt_data", :limit => 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "customer_id"
+    t.text      "receipt_data"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "subscriptions", :force => true do |t|
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20110704071344) do
     t.string    "first_name"
     t.string    "last_name"
     t.string    "api_token"
+    t.string    "shared_secret"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
