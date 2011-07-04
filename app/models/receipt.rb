@@ -20,12 +20,12 @@ class Receipt < ActiveRecord::Base
       # retrieve transaction from iTunes
       uri = URI.parse("https://#{sandbox ? "sandbox" : "buy"}.itunes.apple.com/verifyReceipt")
       request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
-      puts "raw request sent to itunes: #{request_data}"
+      # puts "raw request sent to itunes: #{request_data}"
       request.body = request_data
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true if uri.port == 443
       response = http.request(request)
-      puts "raw response from itunes: #{response.body}"
+      # puts "raw response from itunes: #{response.body}"
     
       # handle response
       case response
@@ -53,7 +53,7 @@ class Receipt < ActiveRecord::Base
       product_id = receipt['product_id']
       transaction_id = receipt['transaction_id']
       purchase_date = receipt['purchase_date']
-      expiration_date = Time.at(receipt['expires_date'].to_i)
+      expiration_date = Time.at(receipt['expires_date'].to_i/1000)
 
       puts "customer_id: #{customer_id}, product_id: #{product_id}, expiration_date: #{expiration_date}"
       
