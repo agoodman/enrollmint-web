@@ -76,8 +76,11 @@ class Receipt < ActiveRecord::Base
       end
 
       # update subscription expiration date
-      # subscription.expires_on = purchase_date + quantity * product.duration.seconds
-      subscription.expires_on = expiration_date
+      if expiration_date < Time.now
+        subscription.expires_on = purchase_date + quantity * product.duration.seconds
+      else
+        subscription.expires_on = expiration_date
+      end
       if subscription.save
         puts "subscription updated with expiration date=#{subscription.expires_on}"
       else
