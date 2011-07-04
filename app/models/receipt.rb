@@ -5,18 +5,18 @@ class Receipt < ActiveRecord::Base
   validates_presence_of :customer_id, :receipt_data
   validates_uniqueness_of :receipt_data
   
-  before_create :retrieve_transaction_data
+  # before_create :retrieve_transaction_data
   
-  private
+  # private
 
   # fetches transaction data from iTunes Store
-  def retrieve_transaction_data
+  def retrieve_transaction_data(sandbox = false)
     unless Rails.env == 'test'
       # build request hash
       request_data = { "receipt-data" => receipt_data }.to_json
     
       # retrieve transaction from iTunes
-      uri = URI.parse("https://sandbox.itunes.apple.com/verifyReceipt")
+      uri = URI.parse("https://#{sandbox ? "sandbox" : "buy"}.itunes.apple.com/verifyReceipt")
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
       request.body = request_data
@@ -37,6 +37,7 @@ class Receipt < ActiveRecord::Base
   
   def process_response_data(response_json)
     response_data = ActiveSupport::JSON.decode(response_json)
+    puts "raw response from itunes: #{response_data}"
     return false unless response_data
     return false if response_data.status.to_i != 0
     
