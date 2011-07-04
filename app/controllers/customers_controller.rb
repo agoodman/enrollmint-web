@@ -19,10 +19,10 @@ class CustomersController < ApplicationController
     
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to customers_path, :notice => "Customer created." }
+        format.html { redirect_to app_customers_path(@app), :notice => "Customer created." }
         format.json { render :json => @customer, :status => :ok }
       else
-        format.html { redirect_to customers_path, :alert => @customer.errors.full_messages.join("<br/>") }
+        format.html { redirect_to app_customers_path(@app), :alert => @customer.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
@@ -38,10 +38,10 @@ class CustomersController < ApplicationController
   def update
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
-        format.html { redirect_to customers_path, :notice => "Customer updated." }
+        format.html { redirect_to app_customers_path(@app), :notice => "Customer updated." }
         format.json { head :ok }
       else
-        format.html { redirect_to customers_path, :alert => @customer.errors.full_messages.join("<br/>") }
+        format.html { redirect_to app_customers_path(@app), :alert => @customer.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
