@@ -19,6 +19,7 @@ class Receipt < ActiveRecord::Base
       uri = URI.parse("https://#{sandbox ? "sandbox" : "buy"}.itunes.apple.com/verifyReceipt")
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
+      puts "raw request sent to itunes: #{request_data}"
       request.body = request_data
       response = http.request(request)
       puts "raw response from itunes: #{response.body}"
