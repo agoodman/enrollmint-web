@@ -53,9 +53,13 @@ class Receipt < ActiveRecord::Base
       product_id = receipt['product_id']
       transaction_id = receipt['transaction_id']
       purchase_date = receipt['purchase_date']
+      expiration_date = Time.at(receipt['expires_date'].to_i)
 
+      puts "customer_id: #{customer_id}, product_id: #{product_id}, expiration_date: #{expiration_date}"
+      
       # lookup product
       product = Product.find_by_identifier(product_id)
+      puts "product found with id=#{product_id}, duration=#{product.duration}"
       return false unless product
 
       # find associated subscription
@@ -63,13 +67,29 @@ class Receipt < ActiveRecord::Base
 
       # create subscription if one is not found; update existing if found
       if subscription.nil?
-        subscription = Subscription.new(:customer_id => customer_id, :product_id => product.id)
+        subscription = Subscription.new
+        subscription.customer_id = customer_id
+        subscription.product_id = product.id
+        puts "subscription created"
+      else
+        puts "subscription found with id=#{subscription.id}"
       end
 
       # update subscription expiration date
-      subscription.expires_on = purchase_date + quantity * product.duration.seconds
-      subscription.save
+      # subscription.expires_on = purchase_date + quantity * product.duration.seconds
+      subscription.expires_on = expiration_date
+      if subscription.save
+        puts "subscription updated with expiration date=#{subscription.expires_on}"
+      else
+        puts "failed to save subscription: #{subscription.errors.full_messages}"
+      end
     end
+    
+    return true
+    
+  rescue Exception => e
+    puts "response processing failed: #{e}"
+    return false
   end
   
 end
