@@ -20,6 +20,7 @@ EnrollMint::Application.routes.draw do
     resources :customers, :only => [ :index ]
   end
   resources :customers, :only => [ :create ]
+  resources :subscriptions
 
   match '/features' => 'home#features', :as => 'features'
   root :to => 'home#index'
