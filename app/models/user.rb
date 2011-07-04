@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   private
   
   def generate_api_token
-    self.api_token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{password}--#{rand}--")[0..9]
+    self.api_token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{password}--#{rand}--")[0..9] if api_token.blank?
   end
   
 end

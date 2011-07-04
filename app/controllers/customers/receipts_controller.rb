@@ -11,7 +11,7 @@ class Customers::ReceiptsController < ApplicationController
     
     respond_to do |format|
       if @receipt.save
-        @receipt.retrieve_transaction_data(request.host=~/sandbox/)
+        @receipt.retrieve_transaction_data(request.host=~/sandbox/, current_user.shared_secret)
         format.json { head :ok }
       else
         format.json { render :json => { :errors => @receipt.errors.full_messages }, :status => :unprocessable_entity }

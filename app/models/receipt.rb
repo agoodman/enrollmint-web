@@ -10,10 +10,10 @@ class Receipt < ActiveRecord::Base
   # private
 
   # fetches transaction data from iTunes Store
-  def retrieve_transaction_data(sandbox = false)
+  def retrieve_transaction_data(sandbox = false, secret = nil)
     unless Rails.env == 'test'
       # build request hash
-      request_data = { "receipt-data" => receipt_data }.to_json
+      request_data = { "receipt-data" => receipt_data, "password" => secret }.to_json
     
       # retrieve transaction from iTunes
       uri = URI.parse("https://#{sandbox ? "sandbox" : "buy"}.itunes.apple.com/verifyReceipt")
