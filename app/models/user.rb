@@ -2,7 +2,8 @@ class User < ActiveRecord::Base
   include Clearance::User
 
   has_many :customers
-  has_many :products
+  has_many :apps
+  has_many :products, :through => :apps
 
   validates_presence_of :first_name, :last_name, :terms_of_service_accepted, :api_token
   

@@ -1,12 +1,13 @@
 class Product < ActiveRecord::Base
 
+  belongs_to :app
   belongs_to :user
   
-  validates_presence_of :user_id, :identifier, :duration, :price
+  validates_presence_of :app_id, :identifier, :duration, :price
   validates_uniqueness_of :identifier
   validates_numericality_of :duration, :price
   
-  attr_accessible :user_id, :identifier, :duration, :price
+  attr_accessible :app_id, :identifier, :duration, :price
   
   DURATIONS = { :day => 1.day.to_i,
     :week => 1.week.to_i,

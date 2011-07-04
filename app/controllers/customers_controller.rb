@@ -1,11 +1,11 @@
 class CustomersController < ApplicationController
 
   before_filter :authenticate
-  before_filter :assign_products, :only => [ :index, :show ]
+  before_filter :assign_app, :only => [ :index ]
   before_filter :assign_customer, :only => [ :show, :update ]
   
   def index
-    @customers = Customer.includes(:subscriptions).where(:user_id => current_user.id).order('email asc')
+    @customers = Customer.where(:user_id => current_user.id).order('email asc')
     respond_to do |format|
       format.html
       format.json { render :json => @customers.to_json(:only => [:id,:email]), :status => :ok }
@@ -49,8 +49,12 @@ class CustomersController < ApplicationController
   
   private
   
-  def assign_products
-    @products = Product.where(:user_id => current_user.id).order('identifier asc')
+  def assign_app
+    @app = App.find(params[:app_id])
+  end
+  
+  def assign_customers
+    @customers = Product.where(:user_id => current_user.id).order('identifier asc')
   end
 
   def assign_customer

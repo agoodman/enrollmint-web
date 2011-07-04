@@ -1,5 +1,10 @@
 = content_for :heading, "Manage Subscription Products"
 = content_for :caption, "Use globally unique identifiers to define your subscription products."
+.breadcrumb
+	= link_to 'All Apps', apps_path
+	»
+	= link_to @app.title, @app
+	
 %h2 Products
 - if @products.empty?
 	%p You have not created a product.
@@ -22,7 +27,7 @@
 				%td
 					= link_to_function 'edit', "jQuery('#edit_#{dom_id(product)}').dialog({modal:true,title:'Edit Product',width:'40em'})", :class => 'button wrench'
 					%div{:id => "edit_#{dom_id(product)}", :style => "display:none"}
-						= form_for product do |form| 
+						= form_for [@app,product], :url => app_product_path(@app,product) do |form| 
 							%p
 								= form.label :identifier, "Product ID"
 								= form.text_field :identifier, :class => 'identifier', :size => 40
@@ -33,10 +38,10 @@
 								= form.label :price
 								= form.text_field :price
 							%p= form.submit "UPDATE PRODUCT", :class => 'button'
-					= link_to 'remove', product, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
+					= link_to 'remove', [@app,product], :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
 %p= link_to_function 'ADD PRODUCT', "jQuery('#product_panel').dialog({modal:true,title:'Add a Product',width:'40em'})", :class => 'button'
 #product_panel{:style=>"display:none"}
-	= form_for Product.new do |product| 
+	= form_for [@app,Product.new] do |product| 
 		= product.hidden_field :user_id, :value => current_user.id
 		%p
 			= product.label :identifier, "Product ID"

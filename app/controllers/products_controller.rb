@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
 
   before_filter :authenticate
+  before_filter :assign_app, :only => [ :index, :create, :update, :destroy ]
   before_filter :assign_product, :only => [ :show, :update, :destroy ]
   before_filter :can_access_product?, :only => [ :show, :update, :destroy ]
 
@@ -55,6 +56,10 @@ class ProductsController < ApplicationController
   end
 
   private
+  
+  def assign_app
+    @app = App.find(params[:app_id])
+  end
   
   def assign_product
     @product = Product.find_by_secret_key(params[:secret_key]) if params[:secret_key]

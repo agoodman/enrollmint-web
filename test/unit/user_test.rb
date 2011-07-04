@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  
+
+  should have_many :apps
   should have_many :customers
   should have_many :products
 

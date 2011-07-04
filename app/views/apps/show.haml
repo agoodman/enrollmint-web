@@ -1,0 +1,9 @@
+= content_for :heading, "#{@app.title} Dashboard"
+= content_for :caption, "See real-time status of your app's performance."
+.breadcrumb
+	= link_to 'All Apps', apps_path
+	»
+	= @app.title
+	
+%h2 Dashboard
+%p Dashboard summary goes here

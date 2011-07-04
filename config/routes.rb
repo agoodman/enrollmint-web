@@ -15,10 +15,11 @@ EnrollMint::Application.routes.draw do
   match '/subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
   match '/products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
 
-  resources :products, :only => [ :index, :create, :show, :update, :destroy ]
-  resources :customers, :only => [ :index, :create, :show, :update ] do
-    resources :subscriptions, :controller => 'customers/subscriptions', :only => [ :index, :create, :show, :update ]
+  resources :apps, :only => [ :index, :create, :show, :update, :destroy ] do
+    resources :products, :only => [ :index, :create, :update, :destroy ]
+    resources :customers, :only => [ :index ]
   end
+  resources :customers, :only => [ :create ]
 
   match '/features' => 'home#features', :as => 'features'
   root :to => 'home#index'

@@ -1,8 +1,13 @@
 = content_for :heading, "Manage Customers"
 = content_for :caption, "See details for customers and their active subscriptions."
+.breadcrumb
+	= link_to 'All Apps', apps_path
+	»
+	= link_to @app.title, @app
+	
 %h2 Customers
 - if @customers.empty?
-	%p You have not created a customer.
+	%p You do not have any customers yet.
 - else
 	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
 		%tr
@@ -16,13 +21,3 @@
 				%td= customer.subscriptions.collect {|sub| sub.product.identifier}.join("<br/>")
 				%td= customer.subscriptions.collect {|sub| sub.expires_on.to_s}.join("<br/>")
 				%td
-					%div{:id => "edit_#{dom_id(customer)}", :style => "display:none"}
-					= link_to 'remove', customer, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
-%p= link_to_function 'ADD CUSTOMER', "jQuery('#customer_panel').dialog({modal:true,title:'Add a Customer',width:'40em'})", :class => 'button'
-#customer_panel{:style=>"display:none"}
-	= form_for Customer.new do |customer| 
-		= customer.hidden_field :user_id, :value => current_user.id
-		%p
-			= customer.label :email
-			= customer.text_field :email
-		%p= customer.submit "CREATE CUSTOMER", :class => 'button'
