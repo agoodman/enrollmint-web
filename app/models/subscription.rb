@@ -34,7 +34,7 @@ class Subscription < ActiveRecord::Base
       herald = Herald.new
       herald.post_back_url = product.app.post_back_url
       herald.subscription_ids = [ id ]
-      herald.queue
+      herald.queue(:priority => 2)
     end
   end
   
