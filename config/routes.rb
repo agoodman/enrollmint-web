@@ -19,8 +19,9 @@ EnrollMint::Application.routes.draw do
     resources :products, :only => [ :index, :create, :update, :destroy ]
     resources :customers, :only => [ :index ]
   end
-  resources :customers, :only => [ :create ]
-  resources :subscriptions
+  resources :customers, :only => [ :index, :create, :show, :update ]
+  resources :subscriptions, :only => [ :index, :show ]
+  resources :products, :only => [ :index, :create, :show, :update, :destroy ]
 
   match '/features' => 'home#features', :as => 'features'
   root :to => 'home#index'
