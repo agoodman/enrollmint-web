@@ -32,7 +32,8 @@ class Receipt < ActiveRecord::Base
         return false
       end
     end
-  rescue
+  rescue Exception => e
+    puts "error: #{e}"
     return false
     
   end
