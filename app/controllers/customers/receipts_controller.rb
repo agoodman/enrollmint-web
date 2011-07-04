@@ -19,10 +19,4 @@ class Customers::ReceiptsController < ApplicationController
     end
   end
 
-  private
-  
-  def assign_customer
-    @customer = Customer.find_by_secret_key(params[:secret_key])
-  end
-  
 end

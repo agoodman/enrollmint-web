@@ -12,20 +12,18 @@ class ApplicationController < ActionController::Base
       format.json { render :json => { :errors => [ "You are not authorized." ] }, :status => :unauthorized }
     end
   end
+
+  def assign_customer
+    @customer = Customer.find_by_secret_key(params[:secret_key]) if params[:secret_key]
+    @customer = Customer.find(params[:customer_id]) if params[:customer_id]
+  end
   
   def can_access_customer?
-    @customer = Customer.find(params[:customer_id])
     if ! current_user.customers.include?(@customer)
       respond_to do |format|
         format.html { redirect_to app_customers_path(@app), :alert => "You do not have permission." }
         format.json { render :json => { :errors => [ "You do not have permission." ] }, :status => :unauthorized }
       end
-    end
-    
-  rescue ActiveRecord::RecordNotFound
-    respond_to do |format|
-      format.html { redirect_to app_customers_path(@app), :alert => "Customer does not exist." }
-      format.json { render :json => { :errors => [ "Customer does not exist." ] }, :status => :not_found }
     end
   end
 
