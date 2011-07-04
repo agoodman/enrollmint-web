@@ -52,10 +52,10 @@ class Receipt < ActiveRecord::Base
       quantity = receipt['quantity']
       product_id = receipt['product_id']
       transaction_id = receipt['transaction_id']
-      purchase_date = receipt['purchase_date']
+      purchase_date = Time.at(receipt['purchase_date'].to_i/1000)
       expiration_date = Time.at(receipt['expires_date'].to_i/1000)
 
-      puts "customer_id: #{customer_id}, product_id: #{product_id}, expiration_date: #{expiration_date}"
+      puts "customer_id: #{customer_id}, product_id: #{product_id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
       
       # lookup product
       product = Product.find_by_identifier(product_id)
