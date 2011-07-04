@@ -18,7 +18,8 @@ class SubscriptionsController < ApplicationController
   private
   
   def assign_subscription
-    @subscription = Subscription.includes(:product).find_by_secret_key(params[:secret_key])
+    @subscription = Subscription.includes(:product, :customer).find_by_secret_key(params[:secret_key]) if params[:secret_key]
+    @subscription = Subscription.includes(:product, :customer).find(params[:id]) if params[:id]
   end
   
 end
