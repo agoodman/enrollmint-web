@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-InventoryKitWeb::Application.load_tasks
+EnrollMint::Application.load_tasks

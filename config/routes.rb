@@ -1,4 +1,4 @@
-InventoryKitWeb::Application.routes.draw do
+EnrollMint::Application.routes.draw do
 
   match '/sign_up' => 'users#new', :as => 'sign_up'
   match '/sign_in' => 'sessions#new', :as => 'sign_in'
@@ -17,7 +17,6 @@ InventoryKitWeb::Application.routes.draw do
   resources :products, :only => [ :index, :create, :show, :update, :destroy ]
   resources :customers, :only => [ :index, :create, :show, :update ] do
     resources :subscriptions, :controller => 'customers/subscriptions', :only => [ :index, :create, :show, :update ]
-    resources :receipts, :controller => 'customers/receipts', :only => [ :create ]
   end
 
   match '/features' => 'home#features', :as => 'features'
