@@ -38,10 +38,10 @@ class AppsController < ApplicationController
   def update
     respond_to do |format|
       if @app.update_attributes(params[:app])
-        format.html { redirect_to apps_path, :notice => "App updated." }
+        format.html { redirect_to @app, :notice => "App updated." }
         format.json { head :ok }
       else
-        format.html { redirect_to apps_path, :alert => @app.errors.full_messages.join("<br/>") }
+        format.html { redirect_to @app, :alert => @app.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
       end
     end

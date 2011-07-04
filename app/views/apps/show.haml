@@ -1,4 +1,4 @@
-= content_for :heading, "#{@app.title} Dashboard"
+= content_for :heading, "App Dashboard"
 = content_for :caption, "See real-time status of your app's performance."
 .breadcrumb
 	= link_to 'All Apps', apps_path
@@ -6,4 +6,20 @@
 	= @app.title
 	
 %h2 Dashboard
-%p Dashboard summary goes here
+%p Summary goes here
+
+%h2 Settings
+%p
+	Post-Back URL:
+	- if @app.post_back_url.blank?
+		None
+	- else
+		= @app.post_back_url
+	= link_to_function 'edit', "jQuery('#edit_post_back_url').dialog({modal:true,title:'Edit Post-Back URL for #{@app.title}',width:'30em'})", :class => 'button wrench'
+	#edit_post_back_url{:style => 'display:none'}
+		= form_for @app do |f|
+			%p
+				= f.label :post_back_url, 'Post-Back URL'
+				= f.text_field :post_back_url
+			%p= f.submit 'SAVE', :class => 'button'
+			
