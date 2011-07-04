@@ -8,6 +8,7 @@ gem 'rails', '3.0.3'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'clearance', '>=0.10.2', :git => 'git://github.com/agoodman/clearance'
 gem 'haml'
+gem 'simple_worker'
 
 # Use unicorn as the web server
 # gem 'unicorn'

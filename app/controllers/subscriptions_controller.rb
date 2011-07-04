@@ -13,6 +13,7 @@ class SubscriptionsController < ApplicationController
   def update
     respond_to do |format|
       format.json { head :ok }
+      format.xml { head :ok }
     end
   end
   
@@ -21,6 +22,6 @@ class SubscriptionsController < ApplicationController
   def assign_subscription
     @subscription = Subscription.find_by_secret_key(params[:secret_key]) if params[:secret_key]
     @subscription = Subscription.find(params[:id]) if params[:id]
-  end
+  end 
   
 end

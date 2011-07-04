@@ -10,7 +10,7 @@ class Subscription < ActiveRecord::Base
   attr_accessible :product_id, :expires_on
   
   before_create :generate_secret_key
-  after_save :synchronous_post_back
+  after_save :asynchronous_post_back
   
   # private
   
@@ -26,6 +26,15 @@ class Subscription < ActiveRecord::Base
       request.body = [id].to_json
       puts "posting back to #{uri.request_uri} with body: #{request.body}"
       response = http.request(request)
+    end
+  end
+  
+  def asynchronous_post_back
+    unless product.app.post_back_url.blank?
+      herald = Herald.new
+      herald.post_back_url = product.app.post_back_url
+      herald.subscription_ids = [ id ]
+      herald.queue
     end
   end
   
