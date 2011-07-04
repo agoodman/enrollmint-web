@@ -17,7 +17,7 @@
 			%th 
 		- @customers.each do |customer| 
 			%tr 
-				%td= link_to customer.email, customer
+				%td= customer.email
 				%td= customer.subscriptions.collect {|sub| sub.product.identifier}.join("<br/>")
 				%td= customer.subscriptions.collect {|sub| sub.expires_on.to_s}.join("<br/>")
 				%td
