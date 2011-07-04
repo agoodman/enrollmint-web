@@ -15,6 +15,12 @@
 		%span#hide_api_token{:style => 'display:none'}
 			= @user.api_token
 			= link_to_function 'hide token', "jQuery('#show_api_token').show();jQuery('#hide_api_token,#whatnext').hide()"
+	%p.secret
+		Shared Secret: 
+		%span#show_secret= link_to_function 'show shared secret', "jQuery('#show_secret').hide();jQuery('#hide_secret').show()"
+		%span#hide_secret{:style => 'display:none'}
+			= @user.shared_secret
+			= link_to_function 'hide shared secret', "jQuery('#show_secret').show();jQuery('#hide_secret').hide()"
 	%p= link_to_function 'EDIT ACCOUNT', "jQuery('#edit_account').dialog({modal:true,title:'Edit Your Account',width:'40em'})", :class => 'button'
 
 #whatnext.sidebar.ui-state-highlight{:style => "display:none"}
@@ -45,6 +51,10 @@
 		%p
 			= user.label :email
 			= user.text_field :email
+		
+		%p
+			= user.label :shared_secret
+			= user.text_field :shared_secret
 
 		/ %h3 Time Zone
 		/ %p
