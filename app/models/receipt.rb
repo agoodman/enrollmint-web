@@ -1,3 +1,5 @@
+require 'net/https'
+
 class Receipt < ActiveRecord::Base
 
   belongs_to :customer
@@ -20,7 +22,9 @@ class Receipt < ActiveRecord::Base
       request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
       puts "raw request sent to itunes: #{request_data}"
       request.body = request_data
-      response = Net::HTTP.new(uri.host, uri.port).start {|http| http.request(request)}
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true if uri.port == 443
+      response = http.request(request)
       puts "raw response from itunes: #{response.body}"
     
       # handle response
