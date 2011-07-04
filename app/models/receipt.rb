@@ -21,6 +21,7 @@ class Receipt < ActiveRecord::Base
       request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' => 'application/json'})
       request.body = request_data
       response = http.request(request)
+      puts "raw response from itunes: #{response.body}"
     
       # handle response
       case response
@@ -37,7 +38,6 @@ class Receipt < ActiveRecord::Base
   
   def process_response_data(response_json)
     response_data = ActiveSupport::JSON.decode(response_json)
-    puts "raw response from itunes: #{response_data}"
     return false unless response_data
     return false if response_data.status.to_i != 0
     
