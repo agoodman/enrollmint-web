@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20110705211438) do
     t.datetime "updated_at"
     t.integer  "quantity"
     t.integer  "product_id"
-    t.integer  "transaction_id"
+    t.integer  "transaction_id",  :limit => 8
     t.datetime "purchase_date"
     t.datetime "expiration_date"
   end
