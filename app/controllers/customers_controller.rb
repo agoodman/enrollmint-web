@@ -34,8 +34,8 @@ class CustomersController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.json { render :json => @customer.to_json(:include => { :subscriptions => { :only => [ :id, :expires_on, :created_at, :updated_at ], :include => :product } }) }
-      format.xml { render :xml => @customer.to_xml(:include => { :subscriptions => { :only => [ :id, :expires_on, :created_at, :updated_at ], :include => :product } }) }
+      format.json { render :json => @customer.to_json(:include => { :subscriptions => { :only => [ :expires_on ], :include => { :product => { :only => [ :identifier ] } } }) }
+      format.xml { render :xml => @customer.to_xml(:include => { :subscriptions => { :only => [ :expires_on ], :include => { :product => { :only => [ :identifier ] } } }) }
     end
   end
   
