@@ -13,6 +13,10 @@ class Subscription < ActiveRecord::Base
   after_save :post_back
   
   # private
+
+  def product_identifier
+    product.identifier
+  end
   
   def generate_secret_key
     self.secret_key = Digest::SHA1.hexdigest("--#{product.identifier}--#{customer.email}--")[0..9]
