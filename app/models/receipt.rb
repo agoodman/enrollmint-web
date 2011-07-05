@@ -3,16 +3,16 @@ require 'net/https'
 class Receipt < ActiveRecord::Base
 
   belongs_to :customer
+  belongs_to :product
   
-  validates_presence_of :customer_id, :receipt_data
-  validates_uniqueness_of :receipt_data
+  validates_presence_of :customer_id, :product_id
   
   # before_create :retrieve_transaction_data
   
   # private
 
   # fetches transaction data from iTunes Store
-  def retrieve_transaction_data(sandbox = false, secret = nil)
+  def self.retrieve_from_itunes(customer_id, receipt_data, sandbox = false, secret = nil)
     unless Rails.env == 'test'
       # build request hash
       request_data = { "receipt-data" => receipt_data, "password" => secret }.to_json
@@ -25,74 +25,99 @@ class Receipt < ActiveRecord::Base
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true if uri.port == 443
       response = http.request(request)
-      # puts "raw response from itunes: #{response.body}"
+      puts "raw response from itunes: #{response.body}"
     
       # handle response
       case response
       when Net::HTTPSuccess
-        return process_response_data(response.body)
+        return process_response_data(customer_id, response.body)
       else
-        return false
+        return nil
       end
     end
-  rescue Exception => e
-    puts "error: #{e}"
-    return false
+  # rescue Exception => e
+  #   puts "error: #{e}"
+  #   return nil
     
   end
   
-  def process_response_data(response_json)
+  def self.process_response_data(customer_id, response_json)
     response_data = ActiveSupport::JSON.decode(response_json)
-    return false unless response_data
+    return nil unless response_data
     status = response_data['status'].to_i
 
-    if status==21006 || status==0
-      # extract receipt data
-      receipt = response_data['receipt']
-      quantity = receipt['quantity']
-      product_id = receipt['product_id']
-      transaction_id = receipt['transaction_id']
-      purchase_date = Time.at(receipt['purchase_date'].to_i/1000)
-      expiration_date = Time.at(receipt['expires_date'].to_i/1000)
+    # extract receipt data
+    receipt_data = response_data['receipt']
+    product_identifier = receipt_data['product_id']
+    quantity = receipt_data['quantity']
+    transaction_id = receipt_data['transaction_id']
+    purchase_date = Time.parse(receipt_data['purchase_date'])
+    expiration_date = Time.at(receipt_data['expires_date'].to_i/1000)
 
-      puts "customer_id: #{customer_id}, product_id: #{product_id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
-      
-      # lookup product
-      product = Product.find_by_identifier(product_id)
-      puts "product found with id=#{product_id}, duration=#{product.duration}"
-      return false unless product
+    # lookup product
+    product = Product.find_by_identifier(product_identifier)
+    puts "product found with id=#{product.identifier}, duration=#{product.duration}"
+    return nil unless product
+
+    # populate receipt
+    receipt = Receipt.new
+    receipt.customer_id = customer_id
+    receipt.product_id = product.id
+    receipt.quantity = quantity
+    receipt.transaction_id = transaction_id
+    receipt.purchase_date = purchase_date
+    receipt.expiration_date = expiration_date
+
+    if status==21006 
+      puts "expired - customer_id: #{customer_id}, product_id: #{product.id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
 
       # find associated subscription
       subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
 
-      # create subscription if one is not found; update existing if found
       if subscription.nil?
-        subscription = Subscription.new
-        subscription.customer_id = customer_id
-        subscription.product_id = product.id
-        puts "subscription created"
+        # create if none exists (triggers post back)
+        subscription = Subscription.create(:customer_id => customer_id, :product_id => product.id, :expires_on => expiration_date)
+        puts "subscription created - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
       else
-        puts "subscription found with id=#{subscription.id}"
+        # update expiration date (triggers post back)
+        subscription.update_attributes(:expires_on => expiration_date)
+        puts "subscription updated - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+      end
+      
+      return receipt
+      
+    elsif status==0
+      puts "active - customer_id: #{customer_id}, product_id: #{product_id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
+      
+      # find associated subscription
+      subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
+
+      if subscription.nil?
+        # create if none exists (triggers post back)
+        subscription = Subscription.create(:customer_id => customer_id, :product_id => product.id, :expires_on => expiration_date)
+        puts "subscription created - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+      else
+        # update expiration date (triggers post back)
+        if expiration_date < Time.now
+          new_expiration_date = purchase_date + quantity * product.duration.seconds
+        else
+          new_expiration_date = expiration_date
+        end
+        if subscription.update_attributes(:expires_on => expiration_date)
+          puts "subscription updated - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+        else
+          puts "failed to update subscription id: #{subscription.id}"
+        end
       end
 
-      # update subscription expiration date
-      if expiration_date < Time.now
-        subscription.expires_on = purchase_date + quantity * product.duration.seconds
-      else
-        subscription.expires_on = expiration_date
-      end
-      if subscription.save
-        puts "subscription updated with expiration date=#{subscription.expires_on}"
-      else
-        puts "failed to save subscription: #{subscription.errors.full_messages}"
-      end
+      return receipt
     end
     
-    return true
+    return nil
     
-  rescue Exception => e
-    puts "response processing failed: #{e}"
-    return false
+  # rescue Exception => e
+  #   puts "response processing failed: #{e}"
+  #   return nil
   end
   
 end

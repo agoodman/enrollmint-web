@@ -7,10 +7,10 @@ class Subscription < ActiveRecord::Base
   
   validates_presence_of :customer_id, :product_id, :expires_on
   
-  attr_accessible :product_id, :expires_on
+  attr_accessible :customer_id, :product_id, :expires_on
   
   before_create :generate_secret_key
-  after_save :asynchronous_post_back
+  after_save :post_back
   
   # private
   
@@ -18,14 +18,22 @@ class Subscription < ActiveRecord::Base
     self.secret_key = Digest::SHA1.hexdigest("--#{product.identifier}--#{customer.email}--")[0..9]
   end
 
+  def post_back
+    unless product.app.post_back_url.blank?
+      if true # product.app.user.sync_post_back?
+        synchronous_post_back
+      else
+        asynchronous_post_back
+      end
+    end    
+  end
+  
   def synchronous_post_back
     unless product.app.post_back_url.blank?
-      uri = URI.parse(product.app.post_back_url)
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Post.new(uri.request_uri, initheader = {'Content-Type' => 'application/json'})
-      request.body = [id].to_json
-      puts "posting back to #{uri.request_uri} with body: #{request.body}"
-      response = http.request(request)
+      herald = Herald.new
+      herald.post_back_url = product.app.post_back_url
+      herald.subscription_ids = [ id ]
+      herald.run
     end
   end
   

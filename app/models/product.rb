@@ -2,6 +2,7 @@ class Product < ActiveRecord::Base
 
   belongs_to :app
   belongs_to :user
+  has_many :receipts
   
   validates_presence_of :app_id, :identifier, :duration, :price
   validates_uniqueness_of :identifier
