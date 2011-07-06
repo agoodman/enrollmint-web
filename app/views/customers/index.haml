@@ -19,5 +19,5 @@
 			%tr 
 				%td= customer.email
 				%td= customer.subscriptions.collect {|sub| sub.product.identifier}.join("<br/>")
-				%td= customer.subscriptions.collect {|sub| sub.expires_on.to_s}.join("<br/>")
+				%td= customer.subscriptions.collect {|sub| sub.expiration_date.to_s}.join("<br/>")
 				%td

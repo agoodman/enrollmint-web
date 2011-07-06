@@ -7,6 +7,6 @@ class SubscriptionTest < ActiveSupport::TestCase
   
   should validate_presence_of :customer_id
   should validate_presence_of :product_id
-  should validate_presence_of :expires_on
+  should validate_presence_of :expiration_date
   
 end

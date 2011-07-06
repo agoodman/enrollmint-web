@@ -5,9 +5,9 @@ class Subscription < ActiveRecord::Base
   belongs_to :customer
   belongs_to :product
   
-  validates_presence_of :customer_id, :product_id, :expires_on
+  validates_presence_of :customer_id, :product_id, :expiration_date
   
-  attr_accessible :customer_id, :product_id, :expires_on
+  attr_accessible :customer_id, :product_id, :expiration_date
   
   before_create :generate_secret_key
   after_save :post_back

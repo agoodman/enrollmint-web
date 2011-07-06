@@ -24,7 +24,7 @@
 		- @customer.subscriptions.each do |subscription| 
 			%tr
 				%td= subscription.product.identifier
-				%td= subscription.expires_on.to_s
+				%td= subscription.expiration_date.to_s
 				%td
 					= link_to_function 'edit', "jQuery('#edit_#{dom_id(subscription)}').dialog({modal:true,title:'Edit Subscription',width:'40em'})", :class => 'button wrench'
 					%div{:id=>"edit_#{dom_id(subscription)}", :style => "display:none"}
@@ -33,8 +33,8 @@
 								Product ID:
 								= subscription.product.identifier
 							%p
-								= form.label :expires_on
-								= form.text_field :expires_on, :class => 'datepicker', :id => "#{dom_id(subscription)}_expires_on"
+								= form.label :expiration_date
+								= form.text_field :expiration_date, :class => 'datepicker', :id => "#{dom_id(subscription)}_expiration_date"
 							%p= form.submit "UPDATE SUBSCRIPTION", :class => 'button'
 					= link_to 'delete', [@customer,subscription], :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
 %p= link_to_function "CREATE SUBSCRIPTION", "jQuery('#subscription_panel').dialog({modal:true,title:'Create a Subscription',width:'40em'})", :class => 'button'
@@ -45,6 +45,6 @@
 			= form.label :product_id, "Product ID"
 			= form.select :product_id, @products.collect {|product| [product.identifier,product.id]}, :class => 'identifier'
 		%p
-			= form.label :expires_on
-			= form.text_field :expires_on, :class => 'datepicker'
+			= form.label :expiration_date
+			= form.text_field :expiration_date, :class => 'datepicker'
 		%p= form.submit "CREATE SUBSCRIPTION", :class => 'button'
