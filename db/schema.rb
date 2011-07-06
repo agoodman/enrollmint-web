@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110706045432) do
+ActiveRecord::Schema.define(:version => 20110706080328) do
 
   create_table "apps", :force => true do |t|
     t.string    "title"
@@ -22,10 +22,10 @@ ActiveRecord::Schema.define(:version => 20110706045432) do
   end
 
   create_table "couriers", :force => true do |t|
-    t.string   "post_back_url"
-    t.integer  "subscription_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string    "post_back_url"
+    t.integer   "subscription_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "customers", :force => true do |t|
@@ -37,16 +37,16 @@ ActiveRecord::Schema.define(:version => 20110706045432) do
   end
 
   create_table "delayed_jobs", :force => true do |t|
-    t.integer  "priority",   :default => 0
-    t.integer  "attempts",   :default => 0
-    t.text     "handler"
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.text     "locked_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer   "priority",   :default => 0
+    t.integer   "attempts",   :default => 0
+    t.text      "handler"
+    t.text      "last_error"
+    t.timestamp "run_at"
+    t.timestamp "locked_at"
+    t.timestamp "failed_at"
+    t.text      "locked_by"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
   end
 
   create_table "products", :force => true do |t|
@@ -72,12 +72,12 @@ ActiveRecord::Schema.define(:version => 20110706045432) do
   end
 
   create_table "subscriptions", :force => true do |t|
-    t.integer   "customer_id"
-    t.date      "expires_on"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "product_id"
-    t.string    "secret_key"
+    t.integer  "customer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "product_id"
+    t.string   "secret_key"
+    t.datetime "expiration_date"
   end
 
   create_table "users", :force => true do |t|
