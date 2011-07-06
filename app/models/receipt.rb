@@ -101,8 +101,10 @@ class Receipt < ActiveRecord::Base
         else
           new_expiration_date = expiration_date
         end
-        subscription.update_attributes(:expires_on => new_expiration_date)
-        puts "subscription updated active - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+        if new_expiration_date > subscription.expires_on
+          subscription.update_attributes(:expires_on => new_expiration_date)
+          puts "subscription updated active - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+        end
       end
 
       return receipt
