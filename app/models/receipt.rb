@@ -77,25 +77,23 @@ class Receipt < ActiveRecord::Base
       if subscription.nil?
         # create if none exists (triggers post back)
         subscription = Subscription.create(:customer_id => customer_id, :product_id => product.id, :expires_on => expiration_date)
-        puts "subscription created - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+        puts "subscription created expired - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
       else
         # update expiration date (triggers post back)
         subscription.update_attributes(:expires_on => expiration_date)
-        puts "subscription updated - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+        puts "subscription updated expired - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
       end
       
       return receipt
       
     elsif status==0
-      puts "active - customer_id: #{customer_id}, product_id: #{product.id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
-      
       # find associated subscription
       subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
 
       if subscription.nil?
         # create if none exists (triggers post back)
         subscription = Subscription.create(:customer_id => customer_id, :product_id => product.id, :expires_on => expiration_date)
-        puts "subscription created - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
+        puts "subscription created active - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
       else
         # update expiration date (triggers post back)
         if expiration_date < Time.now
@@ -103,11 +101,8 @@ class Receipt < ActiveRecord::Base
         else
           new_expiration_date = expiration_date
         end
-        if subscription.update_attributes(:expires_on => expiration_date)
-          puts "subscription updated - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
-        else
-          puts "failed to update subscription id: #{subscription.id}"
-        end
+        subscription.update_attributes(:expires_on => new_expiration_date)
+        puts "subscription updated active - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expires_on: #{subscription.expires_on}"
       end
 
       return receipt
