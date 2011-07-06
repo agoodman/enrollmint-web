@@ -87,7 +87,7 @@ class Receipt < ActiveRecord::Base
       return receipt
       
     elsif status==0
-      puts "active - customer_id: #{customer_id}, product_id: #{product_id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
+      puts "active - customer_id: #{customer_id}, product_id: #{product.id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
       
       # find associated subscription
       subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
