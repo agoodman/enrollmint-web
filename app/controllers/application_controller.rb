@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def assign_app
+    @app = App.find_by_bundle_identifier(params[:bundle_identifier])
+  end
+  
   def assign_customer
     @customer = Customer.find_by_secret_key(params[:secret_key]) if params[:secret_key]
     @customer = Customer.find(params[:customer_id]) if params[:customer_id]

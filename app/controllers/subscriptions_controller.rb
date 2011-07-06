@@ -1,6 +1,7 @@
 class SubscriptionsController < ApplicationController
 
   before_filter :authenticate
+  before_filter :assign_app
   before_filter :assign_subscription, :only => [ :show ]
   
   def show
@@ -12,8 +13,14 @@ class SubscriptionsController < ApplicationController
 
   def update
     respond_to do |format|
-      format.json { head :ok }
-      format.xml { head :ok }
+      if @subscription.update_attributes(params[:subscription])
+        format.json { head :ok }
+        format.xml { head :ok }
+      else
+        format.html { redirect_to app_subscriptions_path(@app), :alert => @subscription.errors.full_messages.join("<br/>") }
+        format.json { render :json => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
+      end
     end
   end
   

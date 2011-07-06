@@ -8,20 +8,26 @@ EnrollMint::Application.routes.draw do
   resource :user, :only => [ :create, :show, :update, :destroy ]
   
   SECRET_KEY_REGEX = /[0-9a-fA-F]{10}/
-  match '/customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX
-  match '/customers/:secret_key' => 'customers#update', :via => :put, :secret_key => SECRET_KEY_REGEX
-  match '/customers/:secret_key/receipts' => 'customers/receipts#create', :via => :post, :secret_key => SECRET_KEY_REGEX
-  match '/subscriptions/:secret_key' => 'subscriptions#show', :via => :get, :secret_key => SECRET_KEY_REGEX
-  match '/subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
-  match '/products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
+  BUNDLE_IDENTIFIER_REGEX = /[a-zA-Z0-9\.]+/
 
-  resources :apps, :only => [ :index, :create, :show, :update, :destroy ] do
-    resources :products, :only => [ :index, :create, :update, :destroy ]
-    resources :customers, :only => [ :index ]
+  resources :apps, :only => [ :index, :create ]
+  match '/apps/:bundle_identifier' => 'apps#show', :via => :get, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX
+  match '/apps/:bundle_identifier' => 'apps#update', :via => :put, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX
+  match '/apps/:bundle_identifier' => 'apps#destroy', :via => :delete, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX
+  scope "/apps/:bundle_identifier", :bundle_identifier => BUNDLE_IDENTIFIER_REGEX do
+    # InventoryKit API
+    match 'customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX
+    match 'customers/:secret_key' => 'customers#update', :via => :put, :secret_key => SECRET_KEY_REGEX
+    match 'customers/:secret_key/receipts' => 'customers/receipts#create', :via => :post, :secret_key => SECRET_KEY_REGEX
+    match 'subscriptions/:secret_key' => 'subscriptions#show', :via => :get, :secret_key => SECRET_KEY_REGEX
+    match 'subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
+    match 'products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
+    
+    # General API
+    resources :products
+    resources :customers, :only => [ :index, :create, :show ]
+    resources :subscriptions, :only => [ :create, :show, :update, :destroy ]
   end
-  resources :customers, :only => [ :index, :create, :show, :update ]
-  resources :subscriptions, :only => [ :index, :show ]
-  resources :products, :only => [ :index, :create, :show, :update, :destroy ]
 
   match '/features' => 'home#features', :as => 'features'
   root :to => 'home#index'

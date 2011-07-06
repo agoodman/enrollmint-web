@@ -4,5 +4,8 @@ class App < ActiveRecord::Base
   has_many :products
   
   validates_presence_of :user_id, :title, :bundle_identifier
+  validates_uniqueness_of :bundle_identifier
+  
+  attr_accessible :title, :bundle_identifier
 
 end

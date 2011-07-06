@@ -1,12 +1,12 @@
 class ProductsController < ApplicationController
 
   before_filter :authenticate
-  before_filter :assign_app, :only => [ :index, :create, :update, :destroy ]
+  before_filter :assign_app
   before_filter :assign_product, :only => [ :show, :update, :destroy ]
   before_filter :can_access_product?, :only => [ :show, :update, :destroy ]
 
   def index
-    @products = Product.where(:user_id => current_user.id).order('identifier asc')
+    @products = @app.products
     respond_to do |format|
       format.html
       format.json { render :json => @products.to_json(:only => [:id, :identifier, :duration, :price]) }
@@ -63,10 +63,6 @@ class ProductsController < ApplicationController
   end
 
   private
-  
-  def assign_app
-    @app = App.find(params[:app_id])
-  end
   
   def assign_product
     @product = Product.find_by_secret_key(params[:secret_key]) if params[:secret_key]

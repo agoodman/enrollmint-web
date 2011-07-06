@@ -9,6 +9,7 @@ class AppsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @apps.to_json(:only => [:id, :bundle_identifier, :title]) }
+      format.xml { render :xml => @apps.to_xml(:only => [:id, :bundle_identifier, :title]) }
     end
   end
 
@@ -21,9 +22,11 @@ class AppsController < ApplicationController
       if @app.save
         format.html { redirect_to apps_path }
         format.json { render :json => @app }
+        format.xml { render :xml => @app }
       else
         format.html { redirect_to apps_path, :alert => @app.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
@@ -32,6 +35,7 @@ class AppsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @app }
+      format.xml { render :xml => @app }
     end
   end
 
@@ -40,9 +44,11 @@ class AppsController < ApplicationController
       if @app.update_attributes(params[:app])
         format.html { redirect_to @app, :notice => "App updated." }
         format.json { head :ok }
+        format.xml { head :ok }
       else
         format.html { redirect_to @app, :alert => @app.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
@@ -52,20 +58,21 @@ class AppsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to apps_path, :notice => "App deleted." }
       format.json { head :ok }
+      format.xml { head :ok }
     end
   end
 
   private
   
   def assign_app
-    @app = App.find_by_secret_key(params[:secret_key]) if params[:secret_key]
-    @app = App.find(params[:id]) if params[:id]
+    @app = App.find_by_bundle_identifier(params[:bundle_identifier]) if params[:bundle_identifier]
   end
   
   def can_access_app?
     unless current_user.apps.include?(@app)
       respond_to do |format|
         format.json { render :json => { :errors => ["You do not have access"] } }
+        format.xml { render :xml => { :errors => ["You do not have access"] } }
       end
     end
   end

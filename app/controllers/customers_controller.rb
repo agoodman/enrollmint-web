@@ -1,7 +1,7 @@
 class CustomersController < ApplicationController
 
   before_filter :authenticate
-  before_filter :assign_app, :only => [ :index ]
+  before_filter :assign_app
   before_filter :assign_customer, :only => [ :show, :update ]
   
   def index
@@ -54,10 +54,6 @@ class CustomersController < ApplicationController
   end
   
   private
-  
-  def assign_app
-    @app = App.find(params[:app_id])
-  end
   
   def assign_customers
     @customers = Product.where(:user_id => current_user.id).order('identifier asc')
