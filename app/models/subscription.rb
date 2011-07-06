@@ -24,7 +24,7 @@ class Subscription < ActiveRecord::Base
 
   def post_back
     unless product.app.post_back_url.blank?
-      if false # product.app.user.sync_post_back?
+      if true # product.app.user.sync_post_back?
         synchronous_post_back
       else
         asynchronous_post_back
@@ -34,10 +34,7 @@ class Subscription < ActiveRecord::Base
   
   def synchronous_post_back
     unless product.app.post_back_url.blank?
-      herald = Herald.new
-      herald.post_back_url = product.app.post_back_url
-      herald.subscription_ids = [ id ]
-      herald.run
+      Delayed::Job.enqueue Courier.create!(:post_back_url => product.app.post_back_url, :subscription_id => id)
     end
   end
   
