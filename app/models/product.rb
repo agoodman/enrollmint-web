@@ -16,7 +16,7 @@ class Product < ActiveRecord::Base
     :year => 1.year.to_i
   }
 
-  before_create :generate_secret_key
+  before_save :generate_secret_key
   
   def generate_secret_key
     self.secret_key = Digest::SHA1.hexdigest("--#{identifier}--")[0..9]
