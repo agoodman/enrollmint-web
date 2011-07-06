@@ -5,7 +5,7 @@ class Customer < ActiveRecord::Base
   has_many :products, :through => :subscriptions
   has_many :receipts
   
-  validates_presence_of :user_id
+  validates_presence_of :user_id, :email
   
   attr_accessible :email
   
