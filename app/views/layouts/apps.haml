@@ -4,8 +4,8 @@
 		= link_to 'FEATURES', features_path
 	#account
 		- if signed_in?
-			= link_to 'PRODUCTS', app_products_path(@app) unless @app.nil?
-			= link_to 'CUSTOMERS', app_customers_path(@app) unless @app.nil?
+			= link_to 'PRODUCTS', products_path(:bundle_identifier => @app.bundle_identifier) unless @app.nil?
+			= link_to 'CUSTOMERS', customers_path(:bundle_identifier => @app.bundle_identifier) unless @app.nil?
 			= link_to 'APPS', apps_path
 			= link_to 'ACCOUNT', user_path
 			= link_to 'SIGN OUT', sign_out_path, :method => :delete

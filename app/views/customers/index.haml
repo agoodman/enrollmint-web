@@ -3,21 +3,29 @@
 .breadcrumb
 	= link_to 'All Apps', apps_path
 	»
-	= link_to @app.title, @app
+	= link_to @app.title, app_path(:bundle_identifier => @app.bundle_identifier)
 	
 %h2 Customers
 - if @customers.empty?
 	%p You do not have any customers yet.
 - else
-	%table{:border => 0, :cellspacing => 0, :cellpadding => 0}
+	%table{:width => '100%', :border => 0, :cellspacing => 0, :cellpadding => 0}
 		%tr
 			%th EMAIL
-			%th.identifier SUBSCRIPTION
+			%th PRODUCT IDENTIFIER
 			%th EXPIRES ON
 			%th 
 		- @customers.each do |customer| 
-			%tr 
-				%td= customer.email
-				%td= customer.subscriptions.collect {|sub| sub.product.identifier}.join("<br/>")
-				%td= customer.subscriptions.collect {|sub| sub.expiration_date.to_s}.join("<br/>")
-				%td
+			- if customer.subscriptions.empty?
+				%tr
+					%td= customer.email
+					%td 
+					%td 
+					%td
+			- else
+				- customer.subscriptions.each do |sub|
+					%tr 
+						%td= customer.email
+						%td= sub.product.identifier
+						%td= sub.expiration_date
+						%td

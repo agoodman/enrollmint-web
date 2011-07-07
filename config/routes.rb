@@ -10,13 +10,14 @@ EnrollMint::Application.routes.draw do
   SECRET_KEY_REGEX = /[0-9a-fA-F]{10}/
   BUNDLE_IDENTIFIER_REGEX = /[a-zA-Z0-9\.]+/
 
-  resources :apps, :only => [ :index, :create ]
-  match '/apps/:bundle_identifier' => 'apps#show', :via => :get, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX
-  match '/apps/:bundle_identifier' => 'apps#update', :via => :put, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX
-  match '/apps/:bundle_identifier' => 'apps#destroy', :via => :delete, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX
+  match '/apps' => 'apps#index', :via => :get, :as => "apps"
+  match '/apps' => 'apps#create', :via => :post, :as => "apps"
+  match '/apps/:bundle_identifier' => 'apps#show', :via => :get, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX, :as => "app"
+  match '/apps/:bundle_identifier' => 'apps#update', :via => :put, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX, :as => "app"
+  match '/apps/:bundle_identifier' => 'apps#destroy', :via => :delete, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX, :as => "app"
   scope "/apps/:bundle_identifier", :bundle_identifier => BUNDLE_IDENTIFIER_REGEX do
     # InventoryKit API
-    match 'customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX
+    match 'customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX, :as => ""
     match 'customers/:secret_key' => 'customers#update', :via => :put, :secret_key => SECRET_KEY_REGEX
     match 'customers/:secret_key/receipts' => 'customers/receipts#create', :via => :post, :secret_key => SECRET_KEY_REGEX
     match 'subscriptions/:secret_key' => 'subscriptions#show', :via => :get, :secret_key => SECRET_KEY_REGEX

@@ -7,24 +7,24 @@
 	%table.apps{:border => 0, :cellspacing => 0, :cellpadding => 0}
 		%tr
 			%th TITLE
-			%th.identifier BUNDLE ID
+			%th BUNDLE ID
 			%th 
 		- @apps.each do |app| 
 			%tr 
-				%td= link_to app.title, app
+				%td= link_to app.title, app_path(:bundle_identifier => app.bundle_identifier)
 				%td= app.bundle_identifier
 				%td
 					= link_to_function 'edit', "jQuery('#edit_#{dom_id(app)}').dialog({modal:true,title:'Edit App',width:'40em'})", :class => 'button wrench'
 					%div{:id => "edit_#{dom_id(app)}", :style => "display:none"}
-						= form_for app do |form| 
+						= form_for app, :url => app_path(:bundle_identifier => app.bundle_identifier) do |form| 
 							%p
 								= form.label :title
 								= form.text_field :title
 							%p
-								= form.label :bundle_identifier, "App ID"
+								= form.label :bundle_identifier, "Bundle ID"
 								= form.text_field :bundle_identifier, :class => 'identifier', :size => 40
 							%p= form.submit "UPDATE APP", :class => 'button'
-					= link_to 'remove', app, :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
+					= link_to 'remove', app_path(:bundle_identifier => app.bundle_identifier), :method => :delete, :confirm => "Are you sure?", :class => 'button trash'
 %p= link_to_function 'ADD APP', "jQuery('#app_panel').dialog({modal:true,title:'Add an App',width:'40em'})", :class => 'button'
 #app_panel{:style=>"display:none"}
 	= form_for App.new do |app| 

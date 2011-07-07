@@ -21,11 +21,11 @@ class ProductsController < ApplicationController
     
     respond_to do |format|
       if @product.save
-        format.html { redirect_to app_products_path(@app) }
+        format.html { redirect_to products_path(:bundle_identifier => @app.bundle_identifier) }
         format.json { render :json => @product }
         format.xml { render :xml => @product }
       else
-        format.html { redirect_to app_products_path(@app), :alert => @product.errors.full_messages.join("<br/>") }
+        format.html { redirect_to products_path(:bundle_identifier => @app.bundle_identifier), :alert => @product.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
         format.xml { render :xml => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
       end
@@ -42,11 +42,11 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update_attributes(params[:product])
-        format.html { redirect_to app_products_path(@app), :notice => "Product updated." }
+        format.html { redirect_to products_path(:bundle_identifier => @app.bundle_identifier), :notice => "Product updated." }
         format.json { head :ok }
         format.xml { head :ok }
       else
-        format.html { redirect_to app_products_path(@app), :alert => @product.errors.full_messages.join("<br/>") }
+        format.html { redirect_to products_path(:bundle_identifier => @app.bundle_identifier), :alert => @product.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
         format.xml { render :xml => { :errors => @product.errors.full_messages }, :status => :unprocessable_entity }
       end
@@ -56,7 +56,7 @@ class ProductsController < ApplicationController
   def destroy
     @product.destroy
     respond_to do |format|
-      format.html { redirect_to app_products_path(@app), :notice => "Product deleted." }
+      format.html { redirect_to products_path(:bundle_identifier => @app.bundle_identifier), :notice => "Product deleted." }
       format.json { head :ok }
       format.xml { head :ok }
     end
