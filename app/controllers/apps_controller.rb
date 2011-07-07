@@ -42,11 +42,11 @@ class AppsController < ApplicationController
   def update
     respond_to do |format|
       if @app.update_attributes(params[:app])
-        format.html { redirect_to @app, :notice => "App updated." }
+        format.html { redirect_to app_path(:bundle_identifier => @app.bundle_identifier), :notice => "App updated." }
         format.json { head :ok }
         format.xml { head :ok }
       else
-        format.html { redirect_to @app, :alert => @app.errors.full_messages.join("<br/>") }
+        format.html { redirect_to app_path(:bundle_identifier => @app.bundle_identifier), :alert => @app.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
         format.xml { render :xml => { :errors => @app.errors.full_messages }, :status => :unprocessable_entity }
       end
