@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 class AddAppIdToProducts < ActiveRecord::Migration
 
   def self.up
@@ -6,7 +8,7 @@ class AddAppIdToProducts < ActiveRecord::Migration
       app = product.user.apps.first
       if app.nil?
         app = App.create!(:title => "App#{product.user.apps.count+1}", 
-                          :bundle_identifier => "your.bundle.id",
+                          :bundle_identifier => "your.bundle.#{Digest::SHA1.hexdigest("--#{Time.now}--#{rand}--")[0..9]}",
                           :user_id => product.user_id)
       end
       product.app_id = app.id
