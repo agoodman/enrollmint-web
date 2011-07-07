@@ -71,12 +71,12 @@ ActiveRecord::Schema.define(:version => 20110707194032) do
   end
 
   create_table "subscriptions", :force => true do |t|
-    t.integer  "customer_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "product_id"
-    t.string   "secret_key"
-    t.datetime "expiration_date"
+    t.integer   "customer_id"
+    t.timestamp "created_at"
+    t.timestamp "updated_at"
+    t.integer   "product_id"
+    t.string    "secret_key"
+    t.timestamp "expiration_date"
   end
 
   create_table "users", :force => true do |t|

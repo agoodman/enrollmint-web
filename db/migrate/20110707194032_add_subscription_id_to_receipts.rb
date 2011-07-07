@@ -2,7 +2,7 @@ class AddSubscriptionIdToReceipts < ActiveRecord::Migration
 
   def self.up
     add_column :receipts, :subscription_id, :integer
-    Receipt.all.each {|r| r.update_attributes(:subscription_id => Subscription.find_by_customer_id_and_product_id(r.customer_id,r.product_id))}
+    Receipt.all.each {|r| r.update_attributes(:subscription_id => Subscription.find_by_customer_id_and_product_id(r.customer_id,r.product_id).id)}
     remove_column :receipts, :customer_id
     remove_column :receipts, :product_id
   end
