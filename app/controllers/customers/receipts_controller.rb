@@ -12,14 +12,13 @@ class Customers::ReceiptsController < ApplicationController
         format.json { render :json => { :errors => [ "Invalid receipt" ] }, :status => :unprocessable_entity }
       else    
         # explicitly assign customer id to prevent injection
-        @receipt.customer_id = @customer.id
+        # @receipt.customer_id = @customer.id
     
         if @receipt.save
-          format.json { head :ok }
+          format.json { render :json => @receipt.to_json(:include => :subscription, :except => :id) }
         else
-          # this will only ever happen when itunes receipt processing is somehow broken/incomplete
           puts "receipt failed validation: #{@receipt.errors.full_messages}"
-          format.json { render :json => { :errors => [ "Invalid receipt" ] }, :status => :unprocessable_entity }
+          format.json { render :json => { :errors => @receipt.errors.full_messages }, :status => :unprocessable_entity }
         end
       end
     end

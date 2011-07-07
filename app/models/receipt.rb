@@ -2,15 +2,11 @@ require 'net/https'
 
 class Receipt < ActiveRecord::Base
 
-  belongs_to :customer
-  belongs_to :product
+  belongs_to :subscription
   
-  validates_presence_of :customer_id, :product_id
+  validates_presence_of :subscription_id, :transaction_id
+  validates_uniqueness_of :transaction_id, :message => "has already been recorded."
   
-  # before_create :retrieve_transaction_data
-  
-  # private
-
   # fetches transaction data from iTunes Store
   def self.retrieve_from_itunes(customer_id, receipt_data, sandbox = false, secret = nil)
     unless Rails.env == 'test'
@@ -61,27 +57,29 @@ class Receipt < ActiveRecord::Base
 
     # populate receipt
     receipt = Receipt.new
-    receipt.customer_id = customer_id
-    receipt.product_id = product.id
     receipt.quantity = quantity
     receipt.transaction_id = transaction_id
     receipt.purchase_date = purchase_date
     receipt.expiration_date = expiration_date
 
     if status==21006 
-      puts "expired - customer_id: #{customer_id}, product_id: #{product.id}, purchase_date: #{purchase_date}, expiration_date: #{expiration_date}"
-
       # find associated subscription
       subscription = Subscription.find_by_customer_id_and_product_id(customer_id, product.id)
 
       if subscription.nil?
         # create if none exists (triggers post back)
         subscription = Subscription.create(:customer_id => customer_id, :product_id => product.id, :expiration_date => expiration_date)
+        receipt.subscription_id = subscription.id
         puts "subscription created expired - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
       else
+        receipt.subscription_id = subscription.id
         # update expiration date (triggers post back)
-        subscription.update_attributes(:expiration_date => expiration_date)
-        puts "subscription updated expired - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
+        if expiration_date > subscription.expiration_date
+          subscription.update_attributes(:expiration_date => expiration_date)
+          puts "subscription updated expired - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
+        else
+          puts "subscription not updated - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
+        end
       end
       
       return receipt
@@ -93,17 +91,16 @@ class Receipt < ActiveRecord::Base
       if subscription.nil?
         # create if none exists (triggers post back)
         subscription = Subscription.create(:customer_id => customer_id, :product_id => product.id, :expiration_date => expiration_date)
+        receipt.subscription_id = subscription.id
         puts "subscription created active - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
       else
+        receipt.subscription_id = subscription.id
         # update expiration date (triggers post back)
-        if expiration_date < Time.now
-          new_expiration_date = purchase_date + quantity * product.duration.seconds
-        else
-          new_expiration_date = expiration_date
-        end
-        if new_expiration_date > subscription.expiration_date
-          subscription.update_attributes(:expiration_date => new_expiration_date)
+        if expiration_date > subscription.expiration_date
+          subscription.update_attributes(:expiration_date => expiration_date)
           puts "subscription updated active - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
+        else
+          puts "subscription not updated - id: #{subscription.id},  customer_id: #{subscription.customer_id} product_id: #{subscription.product_id}, expiration_date: #{subscription.expiration_date}"
         end
       end
 

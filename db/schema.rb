@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110706080328) do
+ActiveRecord::Schema.define(:version => 20110707194032) do
 
   create_table "apps", :force => true do |t|
     t.string    "title"
@@ -61,14 +61,13 @@ ActiveRecord::Schema.define(:version => 20110706080328) do
   end
 
   create_table "receipts", :force => true do |t|
-    t.integer   "customer_id"
-    t.timestamp "created_at"
-    t.timestamp "updated_at"
-    t.integer   "quantity"
-    t.integer   "product_id"
-    t.string    "transaction_id"
-    t.timestamp "purchase_date"
-    t.timestamp "expiration_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "quantity"
+    t.string   "transaction_id"
+    t.datetime "purchase_date"
+    t.datetime "expiration_date"
+    t.integer  "subscription_id"
   end
 
   create_table "subscriptions", :force => true do |t|

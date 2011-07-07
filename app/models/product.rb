@@ -1,8 +1,8 @@
 class Product < ActiveRecord::Base
 
   belongs_to :app
-  belongs_to :user
-  has_many :receipts
+  has_many :subscriptions
+  has_many :customers, :through => :subscriptions
   
   validates_presence_of :app_id, :identifier, :duration, :price
   validates_uniqueness_of :identifier
@@ -10,7 +10,7 @@ class Product < ActiveRecord::Base
   
   attr_accessible :app_id, :identifier, :duration, :price
   
-  DURATIONS = { :day => 1.day.to_i,
+  DURATIONS = { 
     :week => 1.week.to_i,
     :month => 1.month.to_i,
     :year => 1.year.to_i
