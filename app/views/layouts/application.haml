@@ -4,7 +4,7 @@
 		%title 
 			EnrollMint™
 			= "- #{yield(:title)}" if yield(:title)
-		= stylesheet_link_tag :web
+		= stylesheet_link_tag 'web'
 		= javascript_include_tag :defaults
 		= csrf_meta_tag
 		%script{ :src => "https://www.google.com/jsapi?key=ABQIAAAAPxTP6_umMHWyfMXHRo_PQBSEfduqM-1DVSJvrAuG-sXMl3D3XxRzHgplRb-82VvQp6BVNPn5n6zyAQ", :type => "text/javascript"}
