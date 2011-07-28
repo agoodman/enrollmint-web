@@ -16,8 +16,8 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(params[:product])
-    # explicitly assign user id to prevent injection
-    @product.user_id = current_user.id
+    # explicitly assign app id to prevent injection
+    @product.app_id = @app.id
     
     respond_to do |format|
       if @product.save
