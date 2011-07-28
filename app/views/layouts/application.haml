@@ -56,13 +56,13 @@
 					#flash.ui-state-highlight
 						%p
 							%span.ui-icon.ui-icon-info
-							= flash[:notice]
+							=raw flash[:notice]
 							= link_to_function 'dismiss', "jQuery('#flash.ui-state-highlight').hide()", :class => 'button close'
 				- if flash[:alert] 
 					#flash.ui-state-error
 						%p
 							%span.ui-icon.ui-icon-alert
-							= flash[:alert]
+							=raw flash[:alert]
 							= link_to_function 'dismiss', "jQuery('#flash.ui-state-error').hide()", :class => 'button close'
 				= yield
 			#footer
