@@ -39,4 +39,4 @@
 	#whatnext.ui-state-highlight
 		%h4 What Next?
 		%ul
-			%li= link_to 'Add Subscription Products', app_path(@apps.first)
+			%li= link_to 'Add Subscription Products', products_path(:bundle_identifier => @apps.first.bundle_identifier)
