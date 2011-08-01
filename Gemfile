@@ -10,6 +10,7 @@ gem 'clearance', '>=0.10.2', :git => 'git://github.com/agoodman/clearance'
 gem 'haml'
 gem 'simple_worker', '0.6.7'
 gem 'delayed_job'
+gem 'hirefireapp'
 
 group :test do
 	gem 'shoulda'
