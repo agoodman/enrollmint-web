@@ -6,16 +6,16 @@ class SubscriptionsController < ApplicationController
   
   def create
     @subscription = Subscription.new(params[:subscription])
-    # explicitly assign customer id to prevent injection
-    @subscription.customer_id = @customer.id
     
     respond_to do |format|
       if @subscription.save
         format.html { redirect_to @customer, :notice => "Subscription created." }
         format.json { render :json => @subscription, :status => :ok }
+        format.xml { render :xml => @subscription, :status => :ok }
       else
         format.html { redirect_to @customer, :alert => @subscription.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
+        format.xml { render :xml => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
       end
     end
   end
