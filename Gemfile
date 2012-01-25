@@ -10,7 +10,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'clearance', '0.12.0', :git => 'git://github.com/agoodman/clearance'
 gem 'haml'
 gem 'simple_worker', '0.6.7'
-gem 'delayed_job'
+gem 'delayed_job_active_record', '0.3.1'
 gem 'hirefireapp'
 
 group :test do

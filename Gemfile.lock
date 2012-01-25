@@ -40,6 +40,9 @@ GEM
     builder (2.1.2)
     delayed_job (3.0.1)
       activesupport (~> 3.0)
+    delayed_job_active_record (0.3.1)
+      activerecord (> 2.1.0)
+      delayed_job (~> 3.0.0)
     diesel (0.1.5)
       railties
     erubis (2.6.6)
@@ -99,7 +102,7 @@ PLATFORMS
 
 DEPENDENCIES
   clearance (= 0.12.0)!
-  delayed_job
+  delayed_job_active_record (= 0.3.1)
   factory_girl_rails (= 1.4.0)
   haml
   hirefireapp
