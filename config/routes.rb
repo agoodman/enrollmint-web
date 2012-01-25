@@ -17,7 +17,7 @@ EnrollMint::Application.routes.draw do
   match '/apps/:bundle_identifier' => 'apps#destroy', :via => :delete, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX, :as => "app"
   scope "/apps/:bundle_identifier", :bundle_identifier => BUNDLE_IDENTIFIER_REGEX do
     # General API
-    resources :products, ;only => [ :index, :create, :show, :update, :destroy ], :id => /\d+/
+    resources :products, :only => [ :index, :create, :show, :update, :destroy ], :id => /\d+/
     resources :customers, :only => [ :index, :create, :show, :update ], :id => /\d+/
     resources :subscriptions, :only => [ :create, :show, :update, :destroy ], :id => /\d+/
 
