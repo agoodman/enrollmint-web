@@ -4,6 +4,22 @@ class SubscriptionsController < ApplicationController
   before_filter :assign_app
   before_filter :assign_subscription, :only => [ :show ]
   
+  def create
+    @subscription = Subscription.new(params[:subscription])
+    # explicitly assign customer id to prevent injection
+    @subscription.customer_id = @customer.id
+    
+    respond_to do |format|
+      if @subscription.save
+        format.html { redirect_to @customer, :notice => "Subscription created." }
+        format.json { render :json => @subscription, :status => :ok }
+      else
+        format.html { redirect_to @customer, :alert => @subscription.errors.full_messages.join("<br/>") }
+        format.json { render :json => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   def show
     respond_to do |format|
       format.json { render :json => @subscription.to_json(:include => {:customer => { :except => :secret_key }, :product => { :except => :secret_key } }, :except => :secret_key) }
@@ -21,6 +37,14 @@ class SubscriptionsController < ApplicationController
         format.json { render :json => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
         format.xml { render :xml => { :errors => @subscription.errors.full_messages }, :status => :unprocessable_entity }
       end
+    end
+  end
+  
+  def destroy
+    @subscription.destroy
+    respond_to do |format|
+      format.json { head :ok }
+      format.xml { head :ok }
     end
   end
   
