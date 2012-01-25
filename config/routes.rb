@@ -27,6 +27,7 @@ EnrollMint::Application.routes.draw do
     match 'customers/:secret_key/receipts' => 'customers/receipts#create', :via => :post, :secret_key => SECRET_KEY_REGEX
     match 'subscriptions/:secret_key' => 'subscriptions#show', :via => :get, :secret_key => SECRET_KEY_REGEX
     match 'subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
+    match 'products/:secret_key' => 'products#show', :via => :get, :secret_key => SECRET_KEY_REGEX
     match 'products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
   end
 
