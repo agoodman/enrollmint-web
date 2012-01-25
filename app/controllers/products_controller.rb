@@ -34,8 +34,8 @@ class ProductsController < ApplicationController
   
   def show
     respond_to do |format|
-      format.json { render :json => @product, :status => :ok }
-      format.xml { render :xml => @product, :status => :ok }
+      format.json { render :json => @product.to_json(:except => :secret_key), :status => :ok }
+      format.xml { render :xml => @product.to_xml(:except => :secret_key), :status => :ok }
     end
   end
 
