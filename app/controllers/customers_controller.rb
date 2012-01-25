@@ -33,13 +33,10 @@ class CustomersController < ApplicationController
   
   def show
     options = { 
-      :only => [ :id, :email ], 
+      :except => :secret_key, 
       :include => { 
         :subscriptions => { 
-          :include => { 
-            :product => { :except => :secret_key } 
-          }, 
-          :except => :secret_key 
+          :include => :product
         } 
       }
     }
