@@ -7,6 +7,7 @@ class Subscription < ActiveRecord::Base
   has_many :receipts
   
   validates_presence_of :customer_id, :product_id, :expiration_date
+  validates_uniqueness_of :product_id, :scope => :customer_id
   
   attr_accessible :customer_id, :product_id, :expiration_date
   
