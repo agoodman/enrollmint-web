@@ -1,6 +1,6 @@
 class AppsController < ApplicationController
 
-  before_filter :authenticate
+  before_filter :authorize
   before_filter :assign_app, :only => [ :show, :update, :destroy ]
   before_filter :can_access_app?, :only => [ :show, :update, :destroy ]
 

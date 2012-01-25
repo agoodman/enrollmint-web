@@ -1,6 +1,6 @@
 class SubscriptionsController < ApplicationController
 
-  before_filter :authenticate
+  before_filter :authorize
   before_filter :assign_app
   before_filter :assign_subscription, :only => [ :show ]
   

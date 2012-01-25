@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
 
-  before_filter :authenticate
+  before_filter :authorize
   before_filter :assign_app
   before_filter :assign_product, :only => [ :show, :update, :destroy ]
   before_filter :can_access_product?, :only => [ :show, :update, :destroy ]

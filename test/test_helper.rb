@@ -3,7 +3,8 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'shoulda'
 require 'clearance'
-require 'clearance/shoulda_macros'
+require 'factory_girl'
+require 'clearance/testing'
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.

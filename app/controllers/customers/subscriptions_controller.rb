@@ -1,6 +1,6 @@
 class Customers::SubscriptionsController < ApplicationController
 
-  before_filter :authenticate
+  before_filter :authorize
   before_filter :assign_customer
   before_filter :can_access_customer?
   

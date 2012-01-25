@@ -1,6 +1,6 @@
 class UsersController < Clearance::UsersController
 
-  before_filter :authenticate, :except => [ :new, :create ]
+  before_filter :authorize, :except => [ :new, :create ]
   skip_before_filter :redirect_to_root
   
   def show

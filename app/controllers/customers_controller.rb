@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
 
-  before_filter :authenticate
+  before_filter :authorize
   before_filter :assign_app
   before_filter :assign_customer, :only => [ :show, :update ]
   
@@ -32,10 +32,21 @@ class CustomersController < ApplicationController
   end
   
   def show
+    options = { 
+      :only => [ :id, :email ], 
+      :include => { 
+        :subscriptions => { 
+          :include => { 
+            :product => { :except => :secret_key } 
+          }, 
+          :except => :secret_key 
+        } 
+      }
+    }
     respond_to do |format|
       format.html
-      format.json { render :json => @customer.to_json(:only => [ :id, :email ], :include => { :subscriptions => { :include => { :product => { :except => :secret_key } }, :except => :secret_key } }) }
-      format.json { render :xml => @customer.to_xml(:only => [ :id, :email ], :include => { :subscriptions => { :include => { :product => { :except => :secret_key } }, :except => :secret_key } }) }
+      format.json { render :json => @customer.to_json(options), :status => :ok }
+      format.xml { render :xml => @customer.to_xml(options), :status => :ok }
     end
   end
   

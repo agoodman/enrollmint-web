@@ -5,7 +5,6 @@ end
 Factory.define :user do |user|
   user.email                 { Factory.next :email }
   user.password              { "password" }
-  user.password_confirmation { "password" }
   user.first_name           { "first" }
   user.last_name            { "last" }
   user.terms_of_service_accepted  { true }
