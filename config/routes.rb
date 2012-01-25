@@ -16,18 +16,18 @@ EnrollMint::Application.routes.draw do
   match '/apps/:bundle_identifier' => 'apps#update', :via => :put, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX, :as => "app"
   match '/apps/:bundle_identifier' => 'apps#destroy', :via => :delete, :bundle_identifier => BUNDLE_IDENTIFIER_REGEX, :as => "app"
   scope "/apps/:bundle_identifier", :bundle_identifier => BUNDLE_IDENTIFIER_REGEX do
+    # General API
+    resources :products
+    resources :customers, :only => [ :index, :create, :show ]
+    resources :subscriptions, :only => [ :create, :show, :update, :destroy ]
+
     # InventoryKit API
-    match 'customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX, :as => ""
+    match 'customers/:secret_key' => 'customers#show', :via => :get, :secret_key => SECRET_KEY_REGEX, :as => "customer"
     match 'customers/:secret_key' => 'customers#update', :via => :put, :secret_key => SECRET_KEY_REGEX
     match 'customers/:secret_key/receipts' => 'customers/receipts#create', :via => :post, :secret_key => SECRET_KEY_REGEX
     match 'subscriptions/:secret_key' => 'subscriptions#show', :via => :get, :secret_key => SECRET_KEY_REGEX
     match 'subscriptions/:secret_key' => 'subscriptions#update', :via => :put, :secret_key => SECRET_KEY_REGEX
     match 'products/:secret_key' => 'products#update', :via => :put, :secret_key => SECRET_KEY_REGEX
-    
-    # General API
-    resources :products
-    resources :customers, :only => [ :index, :create, :show ]
-    resources :subscriptions, :only => [ :create, :show, :update, :destroy ]
   end
 
   match '/features' => 'home#features', :as => 'features'
