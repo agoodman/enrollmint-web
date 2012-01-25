@@ -2,7 +2,7 @@ class SubscriptionsController < ApplicationController
 
   before_filter :authorize
   before_filter :assign_app
-  before_filter :assign_subscription, :only => [ :show ]
+  before_filter :assign_subscription, :only => [ :show, :update, :destroy ]
   
   def create
     @subscription = Subscription.new(params[:subscription])
