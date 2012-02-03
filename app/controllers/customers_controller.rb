@@ -18,11 +18,15 @@ class CustomersController < ApplicationController
     # explicitly assign user id to prevent injection
     @customer.user_id = current_user.id
     
+    options = { 
+      :except => :secret_key, 
+      :include => :subscriptions
+    }
     respond_to do |format|
       if @customer.save
         format.html { redirect_to customers_path(:bundle_identifier => @app.bundle_identifier), :notice => "Customer created." }
-        format.json { render :json => @customer, :status => :ok }
-        format.xml { render :xml => @customer, :status => :ok }
+        format.json { render :json => @customer.to_json(options), :status => :ok }
+        format.xml { render :xml => @customer.to_xml(options), :status => :ok }
       else
         format.html { redirect_to customers_path(:bundle_identifier => @app.bundle_identifier), :alert => @customer.errors.full_messages.join("<br/>") }
         format.json { render :json => { :errors => @customer.errors.full_messages }, :status => :unprocessable_entity }
